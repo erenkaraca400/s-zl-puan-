@@ -31,10 +31,32 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border-radius: 10px 10px 0 0;
+    gap: 20px;
 }
 
 .navbar h1 {
     font-size: 28px;
+    min-width: max-content;
+}
+
+.nav-center {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+}
+
+.nav-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: max-content;
+}
+
+.user-info {
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: 20px;
 }
 
 .nav-buttons {
@@ -61,6 +83,14 @@ body {
     background: white;
     color: #667eea;
     font-weight: bold;
+}
+
+.btn-logout {
+    background: rgba(255, 100, 100, 0.3) !important;
+}
+
+.btn-logout:hover {
+    background: rgba(255, 100, 100, 0.6) !important;
 }
 
 /* PANEL YAPISI */
@@ -218,12 +248,12 @@ body {
 }
 
 .btn-success {
-    background: #10b981;
-    color: white;
+    background: #10b981 !important;
+    color: white !important;
 }
 
 .btn-success:hover {
-    background: #059669;
+    background: #059669 !important;
 }
 
 .btn-success:disabled {
@@ -564,6 +594,37 @@ body {
     flex: 1;
 }
 
+.admin-hint, .info-box {
+    background: #dbeafe;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #0c4a6e;
+    margin-bottom: 20px;
+    border-left: 4px solid #3b82f6;
+}
+
+/* STAT CARDS */
+.stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .container {
@@ -574,6 +635,15 @@ body {
         flex-direction: column;
         gap: 15px;
         border-radius: 0;
+    }
+
+    .navbar h1 {
+        font-size: 24px;
+    }
+
+    .nav-center, .nav-user {
+        width: 100%;
+        justify-content: center;
     }
 
     .panel {
@@ -602,5 +672,9 @@ body {
 
     .form {
         gap: 8px;
+    }
+
+    .user-info {
+        font-size: 12px;
     }
 }

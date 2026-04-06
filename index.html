@@ -10,9 +10,15 @@
     <div class="container">
         <nav class="navbar">
             <h1>🍽️ Yemek Sepeti</h1>
-            <div class="nav-buttons">
-                <button id="customerBtn" class="nav-btn active">Müşteri</button>
-                <button id="adminBtn" class="nav-btn">Yönetici</button>
+            <div class="nav-center">
+                <button id="customerBtn" class="nav-btn active">👤 Müşteri</button>
+                <button id="shopBtn" class="nav-btn">🏪 Dükkan</button>
+                <button id="adminBtn" class="nav-btn" style="display: none;">👨‍💼 Admin</button>
+                <button id="openShopBtn" class="nav-btn btn-success" style="display: none;">+ Dükkan Aç</button>
+            </div>
+            <div class="nav-user">
+                <span id="userDisplay" class="user-info"></span>
+                <button id="logoutBtn" class="nav-btn btn-logout">Çıkış Yap</button>
             </div>
         </nav>
 
@@ -69,49 +75,33 @@
             </div>
         </div>
 
-        <!-- YÖNETİCİ TARAFINDA -->
-        <div id="adminPanel" class="panel">
+        <!-- DÜKKAN TARAFINDA -->
+        <div id="shopPanel" class="panel">
             <div class="admin-tabs">
-                <button class="tab-btn active" data-tab="restaurants-tab">Restoranlar</button>
+                <button class="tab-btn active" data-tab="restaurants-tab">Dükkânlar</button>
                 <button class="tab-btn" data-tab="foods-tab">Yemekler</button>
                 <button class="tab-btn" data-tab="orders-tab">Siparişler</button>
             </div>
 
-            <!-- RESTORANLAR SEKMESİ -->
+            <!-- DÜKKÂNLAR SEKMESİ -->
             <div id="restaurants-tab" class="tab-content active">
-                <h3>Restoranları Yönet</h3>
+                <h3>Dükkânınızı Yönet</h3>
                 <form id="restaurantForm" class="form">
                     <input type="hidden" id="restaurantId">
-                    <input type="text" id="restaurantName" placeholder="Restorant Adı" required>
+                    <input type="text" id="restaurantName" placeholder="Dükkân Adı" required>
                     <input type="text" id="restaurantDesc" placeholder="Açıklama">
                     <input type="text" id="restaurantPhone" placeholder="Telefon">
-                    <button type="submit" class="btn btn-primary">Restorant Ekle</button>
-                    <button type="button" id="cancelEditBtn" class="btn btn-danger" style="display:none;">İptal Et</button>
+                    <button type="submit" class="btn btn-primary">Bilgileri Güncelle</button>
                 </form>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Restorant Adı</th>
-                            <th>Açıklama</th>
-                            <th>Telefon</th>
-                            <th>İşlemler</th>
-                        </tr>
-                    </thead>
-                    <tbody id="restaurantTableBody">
-                        <!-- Restoranlar buraya gelecek -->
-                    </tbody>
-                </table>
+                <div id="myShopInfo" class="profile-card" style="margin-top: 20px;"></div>
             </div>
 
             <!-- YEMEKLER SEKMESİ -->
             <div id="foods-tab" class="tab-content">
-                <h3>Yemekleri Yönet</h3>
+                <h3>Yemeklerinizi Yönet</h3>
                 <form id="foodForm" class="form">
                     <input type="hidden" id="foodId">
-                    <select id="foodRestaurant" required>
-                        <option value="">Restorant Seç</option>
-                    </select>
                     <input type="text" id="foodName" placeholder="Yemek Adı" required>
                     <textarea id="foodDesc" placeholder="Açıklama"></textarea>
                     <input type="number" id="foodPrice" placeholder="Fiyat (₺)" step="0.01" required>
@@ -122,7 +112,6 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Restorant</th>
                             <th>Yemek Adı</th>
                             <th>Açıklama</th>
                             <th>Fiyat</th>
@@ -137,12 +126,11 @@
 
             <!-- SİPARİŞLER SEKMESİ -->
             <div id="orders-tab" class="tab-content">
-                <h3>Siparişleri İzle</h3>
+                <h3>Gelen Siparişler</h3>
                 <table class="table">
                     <thead>
                         <tr>
                             <th>Sipariş ID</th>
-                            <th>Restorant</th>
                             <th>Müşteri Telefonu</th>
                             <th>İçerik</th>
                             <th>Toplam (₺)</th>
@@ -152,6 +140,115 @@
                     </thead>
                     <tbody id="ordersTableBody">
                         <!-- Siparişler buraya gelecek -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ADMİN PANELİ -->
+        <div id="adminPanel" class="panel">
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="admin-dashboard">📊 Dashboard</button>
+                <button class="tab-btn" data-tab="admin-shops">🏪 Tüm Dükkânlar</button>
+                <button class="tab-btn" data-tab="admin-foods">🍽️ Tüm Yemekler</button>
+                <button class="tab-btn" data-tab="admin-orders">📦 Tüm Siparişler</button>
+                <button class="tab-btn" data-tab="admin-users">👥 Kullanıcılar</button>
+            </div>
+
+            <!-- DASHBOARD -->
+            <div id="admin-dashboard" class="tab-content active">
+                <h2>📊 Yönetim Paneli</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0;">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalUsers">0</div>
+                        <div class="stat-label">Toplam Kullanıcı</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalShops">0</div>
+                        <div class="stat-label">Toplam Dükkân</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalFoods">0</div>
+                        <div class="stat-label">Toplam Yemek</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalOrders">0</div>
+                        <div class="stat-label">Toplam Sipariş</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DÜKKÂNLAR -->
+            <div id="admin-shops" class="tab-content">
+                <h3>🏪 Tüm Dükkânlar</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Dükkân Adı</th>
+                            <th>Sahibi</th>
+                            <th>Telefon</th>
+                            <th>Açılış Tarihi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminShopsTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- YEMEKLER -->
+            <div id="admin-foods" class="tab-content">
+                <h3>🍽️ Tüm Yemekler</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Yemek Adı</th>
+                            <th>Dükkân</th>
+                            <th>Fiyat</th>
+                            <th>Sahibi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminFoodsTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SİPARİŞLER -->
+            <div id="admin-orders" class="tab-content">
+                <h3>📦 Tüm Siparişler</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sipariş ID</th>
+                            <th>Müşteri</th>
+                            <th>Dükkân</th>
+                            <th>İçerik</th>
+                            <th>Toplam</th>
+                            <th>Durum</th>
+                            <th>Tarih</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminOrdersTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- KULLANICILAR -->
+            <div id="admin-users" class="tab-content">
+                <h3>👥 Kayıtlı Kullanıcılar</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>İsim</th>
+                            <th>Email</th>
+                            <th>Telefon</th>
+                            <th>Dükkan Sahibi</th>
+                            <th>Kayıt Tarihi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminUsersTableBody">
                     </tbody>
                 </table>
             </div>
