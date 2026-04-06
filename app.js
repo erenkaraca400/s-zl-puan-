@@ -242,6 +242,7 @@ function handleLogout() {
     if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('currentUser');
+        localStorage.removeItem('userRole');
         window.location.href = 'login.html';
     }
 }

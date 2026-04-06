@@ -269,9 +269,8 @@
 
         <div class="login-content">
             <div class="tab-buttons">
-                <button class="tab-btn active" onclick="switchTab('signup')">📝 Kayıt Ol</button>
-                <button class="tab-btn" onclick="switchTab('login')">🔑 Giriş</button>
-                <button class="tab-btn" onclick="switchTab('admin')">👨‍💼 Admin</button>
+                <button class="tab-btn active" onclick="switchTab('signup', event)">📝 Kayıt Ol</button>
+                <button class="tab-btn" onclick="switchTab('login', event)">🔑 Giriş Yap</button>
             </div>
 
             <!-- KAYIT OL -->
@@ -280,13 +279,18 @@
                 <div id="signupSuccess" class="success"></div>
 
                 <div class="info-box">
-                    💡 Yemek Sepeti platformuna katıl ve müşteri olarak başla!
+                    💡 Ad, soyad, telefon, email ve şifre ile hızlıca kayıt olabilirsiniz.
                 </div>
 
                 <form onsubmit="handleSignup(event)">
                     <div class="form-group">
-                        <label>Ad Soyad</label>
-                        <input type="text" id="signupName" placeholder="Adınız ve Soyadınız" required>
+                        <label>Ad</label>
+                        <input type="text" id="signupFirstName" placeholder="Adınız" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Soyad</label>
+                        <input type="text" id="signupLastName" placeholder="Soyadınız" required>
                     </div>
 
                     <div class="form-group">
@@ -299,151 +303,89 @@
                         <input type="email" id="signupEmail" placeholder="ornek@email.com" required>
                     </div>
 
-                    <button type="submit" class="submit-btn">Kayıt Ol</button>
-                </form>
-
-                <div class="footer">
-                    Dükkan açmak istersen sonra yapabilirsin!
-                </div>
-            </div>
-
-            <!-- GİRİŞ YAP -->
-            <div id="login" class="tab-content">
-                <div id="customerError" class="error"></div>
-                <div id="customerSuccess" class="success"></div>
-
-                <div class="info-box">
-                    💡 Yemek Sepeti platformuna katıl ve müşteri olarak başla!
-                </div>
-
-                <form onsubmit="handleCustomerSignup(event)">
                     <div class="form-group">
-                        <label>Ad Soyad</label>
-                        <input type="text" id="customerName" placeholder="Adınız ve Soyadınız" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Telefon Numarası</label>
-                        <input type="tel" id="customerPhone" placeholder="5XX XXX XXXX" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="customerEmail" placeholder="ornek@email.com" required>
+                        <label>Parola</label>
+                        <input type="password" id="signupPassword" placeholder="Şifreniz" required>
                     </div>
 
                     <button type="submit" class="submit-btn">Kayıt Ol</button>
                 </form>
 
                 <div class="footer">
-                    Dükkan açmak istersen sonra yapabilirsin!
+                    Hesabınız varsa hızlıca giriş yapabilirsiniz.
                 </div>
             </div>
 
             <!-- GİRİŞ YAP -->
             <div id="login" class="tab-content">
                 <div id="loginError" class="error"></div>
+                <div id="loginSuccess" class="success"></div>
 
                 <div class="info-box">
-                    💡 Hesabınızla giriş yapın
+                    💡 Müşteri veya yönetici hesabınızla giriş yapabilirsiniz. Yönetici için kullanıcı adı ve parola: yönetici / yönetici
                 </div>
 
                 <form onsubmit="handleLogin(event)">
                     <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="loginEmail" placeholder="ornek@email.com" required>
+                        <label>Kullanıcı adı, Email veya Telefon</label>
+                        <input type="text" id="loginIdentifier" placeholder="Email / Telefon / Kullanıcı adı" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Telefon Numarası</label>
-                        <input type="tel" id="loginPhone" placeholder="5XX XXX XXXX" required>
+                        <label>Parola</label>
+                        <input type="password" id="loginPassword" placeholder="Şifreniz" required>
                     </div>
 
                     <button type="submit" class="submit-btn">Giriş Yap</button>
                 </form>
 
                 <div class="footer">
-                    Hesabın yok mu? Yukarıdan kayıt ol
-                </div>
-            </div>
-
-            <!-- ADMIN GİRİŞİ -->
-            <div id="admin" class="tab-content">
-                <div id="adminError" class="error"></div>
-
-                <div class="info-box">
-                    💡 <strong>Admin Giriş Bilgileri</strong><br>
-                    Kullanıcı Adı: <code>admin</code><br>
-                    Şifre: <code>admin</code>
-                </div>
-
-                <form onsubmit="handleAdminLogin(event)">
-                    <div class="form-group">
-                        <label>Kullanıcı Adı</label>
-                        <input type="text" id="adminUsername" placeholder="admin" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Şifre</label>
-                        <input type="password" id="adminPassword" placeholder="••••••" required>
-                    </div>
-
-                    <button type="submit" class="submit-btn">Admin Girişi</button>
-                </form>
-
-                <div class="footer">
-                    Yönetim paneline gir
+                    Yeni misiniz? Üstteki kayıt bölümünden hemen başlayabilirsiniz.
                 </div>
             </div>
         </div>
-    </div>
 
     <script>
-        // Tab değiştirme
-        function switchTab(tab) {
+        function switchTab(tab, event) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
+
             document.getElementById(tab).classList.add('active');
             event.target.classList.add('active');
         }
 
-        // Şifre görünürlüğü
-        function togglePasswordVisibility(fieldId) {
-            const field = document.getElementById(fieldId);
-            if (field.type === 'password') {
-                field.type = 'text';
-            } else {
-                field.type = 'password';
-            }
-        }
-
-        // Müşteri Kayıt
-        function handleCustomerSignup(event) {
+        function handleSignup(event) {
             event.preventDefault();
-            
-            const name = document.getElementById('customerName').value;
-            const phone = document.getElementById('customerPhone').value;
-            const email = document.getElementById('customerEmail').value;
+
+            const firstName = document.getElementById('signupFirstName').value.trim();
+            const lastName = document.getElementById('signupLastName').value.trim();
+            const phone = document.getElementById('signupPhone').value.trim();
+            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+            const password = document.getElementById('signupPassword').value;
 
             if (phone.length < 10) {
-                showError('customerError', 'Lütfen geçerli bir telefon numarası girin!');
+                showError('signupError', 'Lütfen geçerli bir telefon numarası girin!');
+                return;
+            }
+            if (password.length < 6) {
+                showError('signupError', 'Parola en az 6 karakter olmalıdır.');
                 return;
             }
 
-            // Mevcut kullanıcıları kontrol et
             const users = JSON.parse(localStorage.getItem('users') || '[]');
-            if (users.some(u => u.email === email && u.phone === phone)) {
-                showError('customerError', 'Bu email ve telefon kombinasyonu zaten kayıtlı!');
+            if (users.some(u => u.email === email || u.phone === phone)) {
+                showError('signupError', 'Bu email veya telefon zaten kayıtlı.');
                 return;
             }
 
-            // Yeni kullanıcı oluştur
             const user = {
                 id: Date.now(),
-                name,
+                firstName,
+                lastName,
+                name: firstName + ' ' + lastName,
                 phone,
                 email,
+                password,
                 isShopOwner: false,
                 shopData: null,
                 createdAt: new Date().toLocaleString('tr-TR')
@@ -453,61 +395,49 @@
             localStorage.setItem('users', JSON.stringify(users));
             localStorage.setItem('currentUser', JSON.stringify(user));
             localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userRole', 'customer');
 
-            showSuccess('customerSuccess', '✅ Kayıt başarılı! Yönlendiriliyorsunuz...');
-            
+            showSuccess('signupSuccess', '✅ Kayıt başarılı! Yönlendiriliyorsunuz...');
             setTimeout(() => {
                 window.location.href = 'index.html';
-            }, 1500);
+            }, 1200);
         }
 
-        // Admin Girişi
-        function handleAdminLogin(event) {
+        function handleLogin(event) {
             event.preventDefault();
-            
-            const username = document.getElementById('adminUsername').value;
-            const password = document.getElementById('adminPassword').value;
 
-            // Demo admin credentials
+            const identifier = document.getElementById('loginIdentifier').value.trim();
+            const password = document.getElementById('loginPassword').value;
             const ADMIN_USERNAME = 'yönetici';
             const ADMIN_PASSWORD = 'yönetici';
 
-            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-                // Admin girişi başarılı
+            if (identifier === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
                 const admin = {
                     id: 'ADMIN-' + Date.now(),
                     name: 'Yönetici',
-                    username: username,
-                    isAdmin: true,
-                    loginTime: new Date().toLocaleString('tr-TR')
+                    username: ADMIN_USERNAME,
+                    isAdmin: true
                 };
 
                 localStorage.setItem('currentUser', JSON.stringify(admin));
                 localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userRole', 'admin');
 
-                showSuccess('adminSuccess', '✅ Giriş başarılı! Yönlendiriliyorsunuz...');
-                document.getElementById('adminError').innerHTML = '';
-                
+                showSuccess('loginSuccess', '✅ Yönetici girişi başarılı! Yönlendiriliyorsunuz...');
                 setTimeout(() => {
                     window.location.href = 'index.html';
-                }, 1500);
-            } else {
-                showError('adminError', '❌ Kullanıcı adı veya şifre yanlış!');
+                }, 1200);
+                return;
             }
-        }
-
-        // Giriş Yap
-        function handleLogin(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
-            const phone = document.getElementById('loginPhone').value;
 
             const users = JSON.parse(localStorage.getItem('users') || '[]');
-            const user = users.find(u => u.email === email && u.phone === phone);
+            const user = users.find(u =>
+                (u.email === identifier.toLowerCase() || u.phone === identifier || u.name.toLowerCase() === identifier.toLowerCase())
+                && u.password === password
+            );
 
             if (!user) {
-                showError('loginError', '❌ Email veya telefon yanlış!');
+                showError('loginError', '❌ Email, telefon veya parola yanlış!');
                 return;
             }
 
@@ -516,68 +446,27 @@
             localStorage.setItem('userRole', 'customer');
 
             showSuccess('loginSuccess', '✅ Giriş başarılı! Yönlendiriliyorsunuz...');
-            document.getElementById('loginError').innerHTML = '';
-            
             setTimeout(() => {
                 window.location.href = 'index.html';
-            }, 1500);
+            }, 1200);
         }
 
-        // Admin Girişi
-        function handleAdminLogin(event) {
-            event.preventDefault();
-            
-            const username = document.getElementById('adminUsername').value;
-            const password = document.getElementById('adminPassword').value;
-
-            // Admin kimlik bilgileri
-            const ADMIN_USERNAME = 'admin';
-            const ADMIN_PASSWORD = 'admin';
-
-            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-                const admin = {
-                    id: 'ADMIN-' + Date.now(),
-                    name: 'Sistem Yöneticisi',
-                    username: username,
-                    isAdmin: true
-                };
-
-                localStorage.setItem('currentUser', JSON.stringify(admin));
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userRole', 'admin');
-
-                showSuccess('adminSuccess', '✅ Admin girişi başarılı! Yönlendiriliyorsunuz...');
-                document.getElementById('adminError').innerHTML = '';
-                
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1500);
-            } else {
-                showError('adminError', '❌ Kullanıcı adı veya şifre yanlış!');
-            }
-        }
-
-        // Hata göster
         function showError(elementId, message) {
             const errorEl = document.getElementById(elementId);
+            if (!errorEl) return;
             errorEl.textContent = message;
             errorEl.classList.add('show');
-
-            setTimeout(() => {
-                errorEl.classList.remove('show');
-            }, 5000);
+            setTimeout(() => errorEl.classList.remove('show'), 5000);
         }
 
-        // Başarı göster
         function showSuccess(elementId, message) {
             const successEl = document.getElementById(elementId);
-            if (successEl) {
-                successEl.textContent = message;
-                successEl.classList.add('show');
-            }
+            if (!successEl) return;
+            successEl.textContent = message;
+            successEl.classList.add('show');
+            setTimeout(() => successEl.classList.remove('show'), 5000);
         }
 
-        // Sayfa yüklendiğinde, eğer zaten login olduysa index.html'e yönlendir
         window.addEventListener('load', () => {
             if (localStorage.getItem('isLoggedIn') === 'true') {
                 window.location.href = 'index.html';
