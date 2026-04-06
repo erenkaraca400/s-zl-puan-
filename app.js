@@ -84,6 +84,122 @@ class Database {
                     createdAt: '10.02.2025'
                 },
                 createdAt: '10.02.2025'
+            },
+            {
+                id: 1004,
+                firstName: 'Ali',
+                lastName: 'Çelik',
+                name: 'Ali Çelik',
+                phone: '05551111111',
+                email: 'ali@example.com',
+                password: '123456',
+                isShopOwner: true,
+                shopData: {
+                    name: 'Burger House',
+                    desc: 'Amerikan tarzı burgerler',
+                    phone: '05551111111',
+                    imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80',
+                    tin: '1111111111',
+                    licenseDate: '2025-03-01',
+                    createdAt: '01.03.2025'
+                },
+                createdAt: '01.03.2025'
+            },
+            {
+                id: 1005,
+                firstName: 'Zeynep',
+                lastName: 'Öztürk',
+                name: 'Zeynep Öztürk',
+                phone: '05552222222',
+                email: 'zeynep@example.com',
+                password: '123456',
+                isShopOwner: true,
+                shopData: {
+                    name: 'Pizza Palace',
+                    desc: 'İtalyan pizzaları ve makarnalar',
+                    phone: '05552222222',
+                    imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80',
+                    tin: '2222222222',
+                    licenseDate: '2025-03-15',
+                    createdAt: '15.03.2025'
+                },
+                createdAt: '15.03.2025'
+            },
+            {
+                id: 1006,
+                firstName: 'Mehmet',
+                lastName: 'Şahin',
+                name: 'Mehmet Şahin',
+                phone: '05553333333',
+                email: 'mehmet@example.com',
+                password: '123456',
+                isShopOwner: true,
+                shopData: {
+                    name: 'Çiğ Köfteci',
+                    desc: 'Geleneksel çiğ köfte ve mezeler',
+                    phone: '05553333333',
+                    imageUrl: 'https://images.unsplash.com/photo-1541599468348-e96984315621?auto=format&fit=crop&w=800&q=80',
+                    tin: '3333333333',
+                    licenseDate: '2025-04-01',
+                    createdAt: '01.04.2025'
+                },
+                createdAt: '01.04.2025'
+            },
+            {
+                id: 1007,
+                firstName: 'Ayşe',
+                lastName: 'Yılmaz',
+                name: 'Ayşe Yılmaz',
+                phone: '05554444444',
+                email: 'ayse@example.com',
+                password: '123456',
+                isShopOwner: true,
+                shopData: {
+                    name: 'Kahve Dünyası',
+                    desc: 'Özel kahveler ve tatlılar',
+                    phone: '05554444444',
+                    imageUrl: 'https://images.unsplash.com/photo-1453614512568-c4024d13c247?auto=format&fit=crop&w=800&q=80',
+                    tin: '4444444444',
+                    licenseDate: '2025-04-10',
+                    createdAt: '10.04.2025'
+                },
+                createdAt: '10.04.2025'
+            },
+            {
+                id: 1008,
+                firstName: 'Can',
+                lastName: 'Kaya',
+                name: 'Can Kaya',
+                phone: '05555555555',
+                email: 'can@example.com',
+                password: '123456',
+                isShopOwner: false,
+                shopData: null,
+                createdAt: '20.04.2025'
+            },
+            {
+                id: 1009,
+                firstName: 'Elif',
+                lastName: 'Aydın',
+                name: 'Elif Aydın',
+                phone: '05556666666',
+                email: 'elif@example.com',
+                password: '123456',
+                isShopOwner: false,
+                shopData: null,
+                createdAt: '25.04.2025'
+            },
+            {
+                id: 1010,
+                firstName: 'Burak',
+                lastName: 'Koç',
+                name: 'Burak Koç',
+                phone: '05557777777',
+                email: 'burak@example.com',
+                password: '123456',
+                isShopOwner: false,
+                shopData: null,
+                createdAt: '30.04.2025'
             }
         ];
 
@@ -105,10 +221,47 @@ class Database {
                 phone: '05559876543',
                 imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80',
                 createdAt: '10.02.2025'
+            },
+            {
+                id: 2003,
+                ownerId: 1004,
+                name: 'Burger House',
+                desc: 'Amerikan tarzı burgerler',
+                phone: '05551111111',
+                imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80',
+                createdAt: '01.03.2025'
+            },
+            {
+                id: 2004,
+                ownerId: 1005,
+                name: 'Pizza Palace',
+                desc: 'İtalyan pizzaları ve makarnalar',
+                phone: '05552222222',
+                imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80',
+                createdAt: '15.03.2025'
+            },
+            {
+                id: 2005,
+                ownerId: 1006,
+                name: 'Çiğ Köfteci',
+                desc: 'Geleneksel çiğ köfte ve mezeler',
+                phone: '05553333333',
+                imageUrl: 'https://images.unsplash.com/photo-1541599468348-e96984315621?auto=format&fit=crop&w=800&q=80',
+                createdAt: '01.04.2025'
+            },
+            {
+                id: 2006,
+                ownerId: 1007,
+                name: 'Kahve Dünyası',
+                desc: 'Özel kahveler ve tatlılar',
+                phone: '05554444444',
+                imageUrl: 'https://images.unsplash.com/photo-1453614512568-c4024d13c247?auto=format&fit=crop&w=800&q=80',
+                createdAt: '10.04.2025'
             }
         ];
 
         const sampleFoods = [
+            // Kumru Döner yemekleri
             {
                 id: 3001,
                 restaurantId: 2001,
@@ -127,6 +280,24 @@ class Database {
             },
             {
                 id: 3003,
+                restaurantId: 2001,
+                name: 'İskender Kebap',
+                desc: 'Yoğurtlu, tereyağlı İskender',
+                price: 120,
+                imageUrl: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3004,
+                restaurantId: 2001,
+                name: 'Çiğ Köfte',
+                desc: 'El yapımı çiğ köfte',
+                price: 45,
+                imageUrl: 'https://images.unsplash.com/photo-1541599468348-e96984315621?auto=format&fit=crop&w=800&q=80'
+            },
+
+            // Pideci Usta yemekleri
+            {
+                id: 3005,
                 restaurantId: 2002,
                 name: 'Kıymalı Pide',
                 desc: 'Kıymalı pide, nefis lezzet',
@@ -134,12 +305,164 @@ class Database {
                 imageUrl: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80'
             },
             {
-                id: 3004,
+                id: 3006,
                 restaurantId: 2002,
                 name: 'Lahmacun',
                 desc: 'Kıtır kıtır lahmacun',
                 price: 40,
                 imageUrl: 'https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3007,
+                restaurantId: 2002,
+                name: 'Kaşarlı Pide',
+                desc: 'Sıcak kaşarlı pide',
+                price: 75,
+                imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3008,
+                restaurantId: 2002,
+                name: 'Kuşbaşılı Pide',
+                desc: 'Kuşbaşı etli pide',
+                price: 110,
+                imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80'
+            },
+
+            // Burger House yemekleri
+            {
+                id: 3009,
+                restaurantId: 2003,
+                name: 'Classic Burger',
+                desc: 'Dana eti, cheddar peyniri, marul, domates',
+                price: 95,
+                imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3010,
+                restaurantId: 2003,
+                name: 'Chicken Burger',
+                desc: 'Tavuk göğsü, özel sos, patates kızartması ile',
+                price: 85,
+                imageUrl: 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3011,
+                restaurantId: 2003,
+                name: 'Double Cheeseburger',
+                desc: 'Çift dana eti, bol cheddar',
+                price: 125,
+                imageUrl: 'https://images.unsplash.com/photo-1551782450-17144efb5723?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3012,
+                restaurantId: 2003,
+                name: 'Veggie Burger',
+                desc: 'Sebzeli burger, vegan',
+                price: 75,
+                imageUrl: 'https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=800&q=80'
+            },
+
+            // Pizza Palace yemekleri
+            {
+                id: 3013,
+                restaurantId: 2004,
+                name: 'Margherita Pizza',
+                desc: 'Domates, mozzarella, fesleğen',
+                price: 85,
+                imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3014,
+                restaurantId: 2004,
+                name: 'Pepperoni Pizza',
+                desc: 'Pepperoni, mozzarella, domates sosu',
+                price: 105,
+                imageUrl: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3015,
+                restaurantId: 2004,
+                name: 'Carbonara Makarna',
+                desc: 'Krema, parmesan, jambon',
+                price: 75,
+                imageUrl: 'https://images.unsplash.com/photo-1551892376-c73a4e14c03f?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3016,
+                restaurantId: 2004,
+                name: 'Pesto Makarna',
+                desc: 'Fesleğen soslu, parmesanlı',
+                price: 70,
+                imageUrl: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80'
+            },
+
+            // Çiğ Köfteci yemekleri
+            {
+                id: 3017,
+                restaurantId: 2005,
+                name: 'Çiğ Köfte',
+                desc: 'El yapımı, baharatlı çiğ köfte',
+                price: 45,
+                imageUrl: 'https://images.unsplash.com/photo-1541599468348-e96984315621?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3018,
+                restaurantId: 2005,
+                name: 'Çiğ Köfte Dürüm',
+                desc: 'Çiğ köfte dürüm, marul, soğan ile',
+                price: 55,
+                imageUrl: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3019,
+                restaurantId: 2005,
+                name: 'Yoğurtlu Çiğ Köfte',
+                desc: 'Yoğurtlu çiğ köfte',
+                price: 50,
+                imageUrl: 'https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3020,
+                restaurantId: 2005,
+                name: 'Çiğ Köfte Platter',
+                desc: 'Çiğ köfte tabağı, çeşitli mezeler ile',
+                price: 85,
+                imageUrl: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80'
+            },
+
+            // Kahve Dünyası yemekleri
+            {
+                id: 3021,
+                restaurantId: 2006,
+                name: 'Türk Kahvesi',
+                desc: 'Geleneksel Türk kahvesi',
+                price: 25,
+                imageUrl: 'https://images.unsplash.com/photo-1453614512568-c4024d13c247?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3022,
+                restaurantId: 2006,
+                name: 'Cappuccino',
+                desc: 'İtalyan kahvesi, süt köpüğü ile',
+                price: 35,
+                imageUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3023,
+                restaurantId: 2006,
+                name: 'Cheesecake',
+                desc: 'Kremalı cheesecake',
+                price: 45,
+                imageUrl: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3024,
+                restaurantId: 2006,
+                name: 'Baklava',
+                desc: 'Antep fıstıklı baklava',
+                price: 40,
+                imageUrl: 'https://images.unsplash.com/photo-1481391032119-d89fee7f3d0c?auto=format&fit=crop&w=800&q=80'
             }
         ];
 
@@ -437,8 +760,8 @@ function openShopModal() {
                     </div>
                     
                     <div>
-                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Dükkan Resim URL'si</label>
-                        <input type="url" id="modalShopImage" placeholder="https://example.com/image.jpg" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Dükkan Resim Yükle</label>
+                        <input type="file" id="modalShopImageFile" accept="image/*" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                     </div>
                     
                     <div>
@@ -497,20 +820,21 @@ function openShopModal() {
     });
 }
 
-function createShop(modal) {
+async function createShop(modal) {
     const name = modal.querySelector('#modalShopName').value;
     const desc = modal.querySelector('#modalShopDesc').value;
     const phone = modal.querySelector('#modalShopPhone').value;
     const tin = modal.querySelector('#modalShopTIN').value;
     const licenseDate = modal.querySelector('#modalShopLicenseDate').value;
+    const imageFile = modal.querySelector('#modalShopImageFile').files[0];
     
-    if (!name || !desc || !phone || !tin || !licenseDate) {
+    if (!name || !desc || !phone || !tin || !licenseDate || !imageFile) {
         alert('Lütfen tüm alanları doldurun!');
         return;
     }
     
     const user = db.getCurrentUser();
-    const imageUrl = modal.querySelector('#modalShopImage').value.trim() || 'https://via.placeholder.com/400x250?text=Restoran';
+    const imageUrl = await fileToBase64(imageFile);
     const shopData = {
         name,
         desc,
@@ -566,11 +890,12 @@ function renderCustomerView() {
 function renderRestaurants() {
     const restaurants = db.getRestaurants();
     const html = restaurants.map(r => `
-        <div class="restaurant-card" onclick="viewRestaurant(${r.id})">
+        <div class="restaurant-card">
             <img src="${r.imageUrl || 'https://via.placeholder.com/400x250?text=Restoran'}" alt="${r.name}" />
             <h3>🍽️ ${r.name}</h3>
             <p>${r.desc || 'Açıklama yok'}</p>
             <p class="phone">📞 ${r.phone}</p>
+            <button class="btn btn-primary" onclick="viewRestaurant(${r.id})" style="width: 100%; margin-top: 10px;">Sipariş Ver</button>
         </div>
     `).join('');
     
@@ -583,11 +908,12 @@ function filterRestaurants() {
     const filtered = restaurants.filter(r => r.name.toLowerCase().includes(searchTerm));
     
     const html = filtered.map(r => `
-        <div class="restaurant-card" onclick="viewRestaurant(${r.id})">
+        <div class="restaurant-card">
             <img src="${r.imageUrl || 'https://via.placeholder.com/400x250?text=Restoran'}" alt="${r.name}" />
             <h3>🍽️ ${r.name}</h3>
             <p>${r.desc || 'Açıklama yok'}</p>
             <p class="phone">📞 ${r.phone}</p>
+            <button class="btn btn-primary" onclick="viewRestaurant(${r.id})" style="width: 100%; margin-top: 10px;">Sipariş Ver</button>
         </div>
     `).join('');
     
@@ -612,6 +938,12 @@ function viewRestaurant(restaurantId) {
         html += foods.map(f => `
             <div class="food-item">
                 <img src="${f.imageUrl || 'https://via.placeholder.com/400x250?text=Yemek'}" alt="${f.name}" />
+                <h4>${f.name}</h4>
+                <p class="description">${f.desc}</p>
+                <div class="food-item-footer">
+                    <span class="food-price">₺${f.price.toFixed(2)}</span>
+                    <button class="add-to-cart-btn" onclick="addToCart(${f.id}, '${f.name}', ${f.price}, '${restaurant.name}', ${restaurant.id})">Sepete Ekle</button>
+                </div>
             </div>
         `).join('');
     } else {
@@ -1029,15 +1361,16 @@ function renderFoodTable() {
     document.getElementById('foodTableBody').innerHTML = html || '<tr><td colspan="5">Yemek yok</td></tr>';
 }
 
-function handleRestaurantSubmit(e) {
+async function handleRestaurantSubmit(e) {
     e.preventDefault();
     const user = db.getCurrentUser();
     const name = document.getElementById('restaurantName').value;
     const desc = document.getElementById('restaurantDesc').value;
     const phone = document.getElementById('restaurantPhone').value;
-    const imageUrl = document.getElementById('restaurantImage')?.value.trim() || '';
-    
+    const imageFile = document.getElementById('restaurantImageFile')?.files[0];
     const shops = db.getRestaurantsByOwner(user.id);
+    const imageUrl = imageFile ? await fileToBase64(imageFile) : undefined;
+    
     if (shops.length > 0) {
         db.updateRestaurant(shops[0].id, name, desc, phone, imageUrl);
         alert('✅ Dükkan bilgileri güncellendi!');
@@ -1046,7 +1379,7 @@ function handleRestaurantSubmit(e) {
     renderMyShopInfo();
 }
 
-function handleFoodSubmit(e) {
+async function handleFoodSubmit(e) {
     e.preventDefault();
     const user = db.getCurrentUser();
     const shops = db.getRestaurantsByOwner(user.id);
@@ -1061,7 +1394,8 @@ function handleFoodSubmit(e) {
     const name = document.getElementById('foodName').value;
     const desc = document.getElementById('foodDesc').value;
     const price = document.getElementById('foodPrice').value;
-    const imageUrl = document.getElementById('foodImage').value.trim() || 'https://via.placeholder.com/400x250?text=Yemek';
+    const imageFile = document.getElementById('foodImageFile').files[0];
+    const imageUrl = imageFile ? await fileToBase64(imageFile) : (id ? undefined : 'https://via.placeholder.com/400x250?text=Yemek');
     
     if (id) {
         db.updateFood(parseInt(id), name, desc, price, imageUrl);
@@ -1077,6 +1411,15 @@ function handleFoodSubmit(e) {
     renderFoodTable();
 }
 
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
 function editFood(id) {
     const foods = db.getFoods();
     const food = foods.find(f => f.id == id);
@@ -1085,7 +1428,6 @@ function editFood(id) {
     document.getElementById('foodName').value = food.name;
     document.getElementById('foodDesc').value = food.desc;
     document.getElementById('foodPrice').value = food.price;
-    document.getElementById('foodImage').value = food.imageUrl || '';
     document.getElementById('cancelFoodEditBtn').style.display = 'inline-block';
     
     document.getElementById('foodForm').scrollIntoView({ behavior: 'smooth' });

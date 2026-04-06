@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yemek Sepeti - Restorant Yönetim Sistemi</title>
+    <title>Kolay yemek - Restorant Yönetim Sistemi</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <nav class="navbar">
-            <h1>🍽️ Yemek Sepeti</h1>
+            <h1>🍽️ Kolay yemek</h1>
             <div class="nav-center">
                 <button id="customerBtn" class="nav-btn active">👤 Müşteri</button>
                 <button id="shopBtn" class="nav-btn">🏪 Dükkan</button>
@@ -91,7 +91,7 @@
                     <input type="text" id="restaurantName" placeholder="Dükkân Adı" required>
                     <input type="text" id="restaurantDesc" placeholder="Açıklama">
                     <input type="text" id="restaurantPhone" placeholder="Telefon">
-                    <input type="url" id="restaurantImage" placeholder="Resim URL'si">
+                    <input type="file" id="restaurantImageFile" accept="image/*">
                     <button type="submit" class="btn btn-primary">Bilgileri Güncelle</button>
                 </form>
 
@@ -106,7 +106,7 @@
                     <input type="text" id="foodName" placeholder="Yemek Adı" required>
                     <textarea id="foodDesc" placeholder="Açıklama"></textarea>
                     <input type="number" id="foodPrice" placeholder="Fiyat (₺)" step="0.01" required>
-                    <input type="url" id="foodImage" placeholder="Yemek Resim URL'si">
+                    <input type="file" id="foodImageFile" accept="image/*">
                     <button type="submit" class="btn btn-primary">Yemek Ekle</button>
                     <button type="button" id="cancelFoodEditBtn" class="btn btn-danger" style="display:none;">İptal Et</button>
                 </form>
