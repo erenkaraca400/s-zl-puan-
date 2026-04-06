@@ -8,6 +8,9 @@ class Database {
     }
 
     initializeData() {
+        if (!localStorage.getItem('users')) {
+            localStorage.setItem('users', JSON.stringify([]));
+        }
         if (!localStorage.getItem('restaurants')) {
             localStorage.setItem('restaurants', JSON.stringify([]));
         }
@@ -17,6 +20,132 @@ class Database {
         if (!localStorage.getItem('orders')) {
             localStorage.setItem('orders', JSON.stringify([]));
         }
+        this.seedDemoData();
+    }
+
+    seedDemoData() {
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const restaurants = JSON.parse(localStorage.getItem('restaurants') || '[]');
+        const foods = JSON.parse(localStorage.getItem('foods') || '[]');
+
+        if (users.length > 0 || restaurants.length > 0 || foods.length > 0) {
+            return;
+        }
+
+        const sampleUsers = [
+            {
+                id: 1001,
+                firstName: 'Ahmet',
+                lastName: 'Yıldız',
+                name: 'Ahmet Yıldız',
+                phone: '05551234567',
+                email: 'ahmet@example.com',
+                password: '123456',
+                isShopOwner: false,
+                shopData: null,
+                createdAt: '01.01.2025'
+            },
+            {
+                id: 1002,
+                firstName: 'Fatma',
+                lastName: 'Kara',
+                name: 'Fatma Kara',
+                phone: '05557654321',
+                email: 'fatma@example.com',
+                password: '123456',
+                isShopOwner: true,
+                shopData: {
+                    name: 'Kumru Döner',
+                    desc: 'Lezzetli döner ve mezeler',
+                    phone: '05557654321',
+                    imageUrl: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80',
+                    tin: '1234567890',
+                    licenseDate: '2025-01-01',
+                    createdAt: '01.01.2025'
+                },
+                createdAt: '01.01.2025'
+            },
+            {
+                id: 1003,
+                firstName: 'Merve',
+                lastName: 'Demir',
+                name: 'Merve Demir',
+                phone: '05559876543',
+                email: 'merve@example.com',
+                password: '123456',
+                isShopOwner: true,
+                shopData: {
+                    name: 'Pideci Usta',
+                    desc: 'Sıcak pide ve lahmacun',
+                    phone: '05559876543',
+                    imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80',
+                    tin: '0987654321',
+                    licenseDate: '2025-02-10',
+                    createdAt: '10.02.2025'
+                },
+                createdAt: '10.02.2025'
+            }
+        ];
+
+        const sampleRestaurants = [
+            {
+                id: 2001,
+                ownerId: 1002,
+                name: 'Kumru Döner',
+                desc: 'Lezzetli döner ve mezeler',
+                phone: '05557654321',
+                imageUrl: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80',
+                createdAt: '01.01.2025'
+            },
+            {
+                id: 2002,
+                ownerId: 1003,
+                name: 'Pideci Usta',
+                desc: 'Sıcak pide ve lahmacun',
+                phone: '05559876543',
+                imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80',
+                createdAt: '10.02.2025'
+            }
+        ];
+
+        const sampleFoods = [
+            {
+                id: 3001,
+                restaurantId: 2001,
+                name: 'Et Döner',
+                desc: 'Bol etli, özel soslu döner',
+                price: 85,
+                imageUrl: 'https://images.unsplash.com/photo-1604908177522-8c376fc08c42?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3002,
+                restaurantId: 2001,
+                name: 'Tavuk Döner',
+                desc: 'Yumuşacık tavuk döner',
+                price: 70,
+                imageUrl: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3003,
+                restaurantId: 2002,
+                name: 'Kıymalı Pide',
+                desc: 'Kıymalı pide, nefis lezzet',
+                price: 90,
+                imageUrl: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80'
+            },
+            {
+                id: 3004,
+                restaurantId: 2002,
+                name: 'Lahmacun',
+                desc: 'Kıtır kıtır lahmacun',
+                price: 40,
+                imageUrl: 'https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?auto=format&fit=crop&w=800&q=80'
+            }
+        ];
+
+        localStorage.setItem('users', JSON.stringify(sampleUsers));
+        localStorage.setItem('restaurants', JSON.stringify(sampleRestaurants));
+        localStorage.setItem('foods', JSON.stringify(sampleFoods));
     }
 
     // Restoranlar (Dükkânlar)
@@ -24,7 +153,7 @@ class Database {
         return JSON.parse(localStorage.getItem('restaurants') || '[]');
     }
 
-    addRestaurant(ownerId, name, desc, phone) {
+    addRestaurant(ownerId, name, desc, phone, imageUrl = 'https://via.placeholder.com/400x250?text=Restoran') {
         const restaurants = this.getRestaurants();
         const restaurant = {
             id: Date.now(),
@@ -32,6 +161,7 @@ class Database {
             name,
             desc,
             phone,
+            imageUrl,
             createdAt: new Date().toLocaleString('tr-TR')
         };
         restaurants.push(restaurant);
@@ -47,10 +177,10 @@ class Database {
         return this.getRestaurants().find(r => r.id == id);
     }
 
-    updateRestaurant(id, name, desc, phone) {
+    updateRestaurant(id, name, desc, phone, imageUrl) {
         let restaurants = this.getRestaurants();
         restaurants = restaurants.map(r => 
-            r.id == id ? { ...r, name, desc, phone } : r
+            r.id == id ? { ...r, name, desc, phone, imageUrl: imageUrl || r.imageUrl } : r
         );
         localStorage.setItem('restaurants', JSON.stringify(restaurants));
     }
@@ -74,24 +204,25 @@ class Database {
         return this.getFoods().filter(f => f.restaurantId == restaurantId);
     }
 
-    addFood(restaurantId, name, desc, price) {
+    addFood(restaurantId, name, desc, price, imageUrl = 'https://via.placeholder.com/400x250?text=Yemek') {
         const foods = this.getFoods();
         const food = {
             id: Date.now(),
             restaurantId: parseInt(restaurantId),
             name,
             desc,
-            price: parseFloat(price)
+            price: parseFloat(price),
+            imageUrl
         };
         foods.push(food);
         localStorage.setItem('foods', JSON.stringify(foods));
         return food;
     }
 
-    updateFood(id, name, desc, price) {
+    updateFood(id, name, desc, price, imageUrl) {
         let foods = this.getFoods();
         foods = foods.map(f => 
-            f.id == id ? { ...f, name, desc, price: parseFloat(price) } : f
+            f.id == id ? { ...f, name, desc, price: parseFloat(price), imageUrl: imageUrl || f.imageUrl } : f
         );
         localStorage.setItem('foods', JSON.stringify(foods));
     }
@@ -306,6 +437,11 @@ function openShopModal() {
                     </div>
                     
                     <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 5px;">Dükkan Resim URL'si</label>
+                        <input type="url" id="modalShopImage" placeholder="https://example.com/image.jpg" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                    </div>
+                    
+                    <div>
                         <label style="display: block; font-weight: 600; margin-bottom: 5px;">Vergi Kimlik Numarası</label>
                         <input type="text" id="modalShopTIN" placeholder="VKN" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
                     </div>
@@ -374,10 +510,12 @@ function createShop(modal) {
     }
     
     const user = db.getCurrentUser();
+    const imageUrl = modal.querySelector('#modalShopImage').value.trim() || 'https://via.placeholder.com/400x250?text=Restoran';
     const shopData = {
         name,
         desc,
         phone,
+        imageUrl,
         tin,
         licenseDate,
         createdAt: new Date().toLocaleString('tr-TR')
@@ -387,7 +525,7 @@ function createShop(modal) {
     user.shopData = shopData;
     
     db.updateUser(user);
-    db.addRestaurant(user.id, name, desc, phone);
+    db.addRestaurant(user.id, name, desc, phone, imageUrl);
     
     alert('✅ Dükkanınız açıldı! Yönetim paneline geçiliyor...');
     modal.remove();
@@ -429,6 +567,7 @@ function renderRestaurants() {
     const restaurants = db.getRestaurants();
     const html = restaurants.map(r => `
         <div class="restaurant-card" onclick="viewRestaurant(${r.id})">
+            <img src="${r.imageUrl || 'https://via.placeholder.com/400x250?text=Restoran'}" alt="${r.name}" />
             <h3>🍽️ ${r.name}</h3>
             <p>${r.desc || 'Açıklama yok'}</p>
             <p class="phone">📞 ${r.phone}</p>
@@ -445,6 +584,7 @@ function filterRestaurants() {
     
     const html = filtered.map(r => `
         <div class="restaurant-card" onclick="viewRestaurant(${r.id})">
+            <img src="${r.imageUrl || 'https://via.placeholder.com/400x250?text=Restoran'}" alt="${r.name}" />
             <h3>🍽️ ${r.name}</h3>
             <p>${r.desc || 'Açıklama yok'}</p>
             <p class="phone">📞 ${r.phone}</p>
@@ -460,6 +600,7 @@ function viewRestaurant(restaurantId) {
     
     let html = `
         <div class="detail-header">
+            <img class="detail-image" src="${restaurant.imageUrl || 'https://via.placeholder.com/400x250?text=Restoran'}" alt="${restaurant.name}" />
             <h2>${restaurant.name}</h2>
             <p>${restaurant.desc}</p>
             <p>📞 ${restaurant.phone}</p>
@@ -470,12 +611,7 @@ function viewRestaurant(restaurantId) {
     if (foods.length > 0) {
         html += foods.map(f => `
             <div class="food-item">
-                <h4>${f.name}</h4>
-                <p class="description">${f.desc}</p>
-                <div class="food-item-footer">
-                    <span class="food-price">₺${f.price.toFixed(2)}</span>
-                    <button class="add-to-cart-btn" onclick="addToCart(${f.id}, '${f.name}', ${f.price}, '${restaurant.name}', ${restaurantId})">Sepete Ekle</button>
-                </div>
+                <img src="${f.imageUrl || 'https://via.placeholder.com/400x250?text=Yemek'}" alt="${f.name}" />
             </div>
         `).join('');
     } else {
@@ -850,6 +986,7 @@ function renderMyShopInfo() {
     
     const html = `
         <h3>📍 Mevcut Dükkân Bilgileri</h3>
+        <img class="detail-image" src="${shop.imageUrl || 'https://via.placeholder.com/400x250?text=Restoran'}" alt="${shop.name}" />
         <p><strong>Adı:</strong> ${shop.name}</p>
         <p><strong>Açıklaması:</strong> ${shop.desc}</p>
         <p><strong>Telefon:</strong> ${shop.phone}</p>
@@ -877,6 +1014,7 @@ function renderFoodTable() {
     const html = foods.map(f => `
         <tr>
             <td>${f.name}</td>
+            <td><img src="${f.imageUrl || 'https://via.placeholder.com/180x100?text=Yemek'}" alt="${f.name}" style="width: 120px; height: 80px; object-fit: cover; border-radius: 6px;" /></td>
             <td>${f.desc || '-'}</td>
             <td>₺${f.price.toFixed(2)}</td>
             <td>
@@ -888,7 +1026,7 @@ function renderFoodTable() {
         </tr>
     `).join('');
     
-    document.getElementById('foodTableBody').innerHTML = html || '<tr><td colspan="4">Yemek yok</td></tr>';
+    document.getElementById('foodTableBody').innerHTML = html || '<tr><td colspan="5">Yemek yok</td></tr>';
 }
 
 function handleRestaurantSubmit(e) {
@@ -897,10 +1035,11 @@ function handleRestaurantSubmit(e) {
     const name = document.getElementById('restaurantName').value;
     const desc = document.getElementById('restaurantDesc').value;
     const phone = document.getElementById('restaurantPhone').value;
+    const imageUrl = document.getElementById('restaurantImage')?.value.trim() || '';
     
     const shops = db.getRestaurantsByOwner(user.id);
     if (shops.length > 0) {
-        db.updateRestaurant(shops[0].id, name, desc, phone);
+        db.updateRestaurant(shops[0].id, name, desc, phone, imageUrl);
         alert('✅ Dükkan bilgileri güncellendi!');
     }
     
@@ -922,12 +1061,13 @@ function handleFoodSubmit(e) {
     const name = document.getElementById('foodName').value;
     const desc = document.getElementById('foodDesc').value;
     const price = document.getElementById('foodPrice').value;
+    const imageUrl = document.getElementById('foodImage').value.trim() || 'https://via.placeholder.com/400x250?text=Yemek';
     
     if (id) {
-        db.updateFood(parseInt(id), name, desc, price);
+        db.updateFood(parseInt(id), name, desc, price, imageUrl);
         alert('✅ Yemek güncellendi!');
     } else {
-        db.addFood(restaurantId, name, desc, price);
+        db.addFood(restaurantId, name, desc, price, imageUrl);
         alert('✅ Yemek eklendi!');
     }
     
@@ -945,6 +1085,7 @@ function editFood(id) {
     document.getElementById('foodName').value = food.name;
     document.getElementById('foodDesc').value = food.desc;
     document.getElementById('foodPrice').value = food.price;
+    document.getElementById('foodImage').value = food.imageUrl || '';
     document.getElementById('cancelFoodEditBtn').style.display = 'inline-block';
     
     document.getElementById('foodForm').scrollIntoView({ behavior: 'smooth' });

@@ -91,6 +91,7 @@
                     <input type="text" id="restaurantName" placeholder="Dükkân Adı" required>
                     <input type="text" id="restaurantDesc" placeholder="Açıklama">
                     <input type="text" id="restaurantPhone" placeholder="Telefon">
+                    <input type="url" id="restaurantImage" placeholder="Resim URL'si">
                     <button type="submit" class="btn btn-primary">Bilgileri Güncelle</button>
                 </form>
 
@@ -105,6 +106,7 @@
                     <input type="text" id="foodName" placeholder="Yemek Adı" required>
                     <textarea id="foodDesc" placeholder="Açıklama"></textarea>
                     <input type="number" id="foodPrice" placeholder="Fiyat (₺)" step="0.01" required>
+                    <input type="url" id="foodImage" placeholder="Yemek Resim URL'si">
                     <button type="submit" class="btn btn-primary">Yemek Ekle</button>
                     <button type="button" id="cancelFoodEditBtn" class="btn btn-danger" style="display:none;">İptal Et</button>
                 </form>
@@ -113,6 +115,7 @@
                     <thead>
                         <tr>
                             <th>Yemek Adı</th>
+                            <th>Resim</th>
                             <th>Açıklama</th>
                             <th>Fiyat</th>
                             <th>İşlemler</th>
