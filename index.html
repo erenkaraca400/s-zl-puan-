@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yemek Sepeti - Restorant Yönetim Sistemi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <h1>🍽️ Yemek Sepeti</h1>
+            <div class="nav-buttons">
+                <button id="customerBtn" class="nav-btn active">Müşteri</button>
+                <button id="adminBtn" class="nav-btn">Yönetici</button>
+            </div>
+        </nav>
+
+        <!-- MÜŞTERİ TARAFINDA -->
+        <div id="customerPanel" class="panel active">
+            <div class="customer-tabs">
+                <button class="customer-tab-btn active" data-tab="explore-tab">Keşfet</button>
+                <button class="customer-tab-btn" data-tab="orders-tab">Siparişlerim</button>
+                <button class="customer-tab-btn" data-tab="profile-tab">Profilim</button>
+            </div>
+
+            <!-- KEŞFET SEKMESİ -->
+            <div id="explore-tab" class="customer-tab-content active">
+                <div class="customer-header">
+                    <h2>Restoranları Keşfet</h2>
+                    <input type="text" id="searchRestaurant" placeholder="Restorant ara...">
+                </div>
+
+                <div id="restaurantList" class="restaurants-grid">
+                    <!-- Restoranlar buraya gelecek -->
+                </div>
+            </div>
+
+            <!-- SİPARİŞLERİM SEKMESİ -->
+            <div id="orders-tab" class="customer-tab-content">
+                <h2>Siparişlerim</h2>
+                <div id="myOrdersList" class="orders-list">
+                    <!-- Siparişler buraya gelecek -->
+                </div>
+            </div>
+
+            <!-- PROFİLİM SEKMESİ -->
+            <div id="profile-tab" class="customer-tab-content">
+                <h2>Profilim</h2>
+                <div id="profileContent"></div>
+            </div>
+
+            <!-- Restorant Detayı -->
+            <div id="restaurantDetail" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div id="detailContent"></div>
+                </div>
+            </div>
+
+            <!-- Alışveriş Sepeti -->
+            <div class="cart-section">
+                <h3>🛒 Sepetim</h3>
+                <div id="cartItems"></div>
+                <div class="cart-total">
+                    <strong>Toplam: ₺<span id="cartTotal">0</span></strong>
+                </div>
+                <button id="checkoutBtn" class="btn btn-success" disabled>Sipariş Ver</button>
+            </div>
+        </div>
+
+        <!-- YÖNETİCİ TARAFINDA -->
+        <div id="adminPanel" class="panel">
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="restaurants-tab">Restoranlar</button>
+                <button class="tab-btn" data-tab="foods-tab">Yemekler</button>
+                <button class="tab-btn" data-tab="orders-tab">Siparişler</button>
+            </div>
+
+            <!-- RESTORANLAR SEKMESİ -->
+            <div id="restaurants-tab" class="tab-content active">
+                <h3>Restoranları Yönet</h3>
+                <form id="restaurantForm" class="form">
+                    <input type="hidden" id="restaurantId">
+                    <input type="text" id="restaurantName" placeholder="Restorant Adı" required>
+                    <input type="text" id="restaurantDesc" placeholder="Açıklama">
+                    <input type="text" id="restaurantPhone" placeholder="Telefon">
+                    <button type="submit" class="btn btn-primary">Restorant Ekle</button>
+                    <button type="button" id="cancelEditBtn" class="btn btn-danger" style="display:none;">İptal Et</button>
+                </form>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Restorant Adı</th>
+                            <th>Açıklama</th>
+                            <th>Telefon</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="restaurantTableBody">
+                        <!-- Restoranlar buraya gelecek -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- YEMEKLER SEKMESİ -->
+            <div id="foods-tab" class="tab-content">
+                <h3>Yemekleri Yönet</h3>
+                <form id="foodForm" class="form">
+                    <input type="hidden" id="foodId">
+                    <select id="foodRestaurant" required>
+                        <option value="">Restorant Seç</option>
+                    </select>
+                    <input type="text" id="foodName" placeholder="Yemek Adı" required>
+                    <textarea id="foodDesc" placeholder="Açıklama"></textarea>
+                    <input type="number" id="foodPrice" placeholder="Fiyat (₺)" step="0.01" required>
+                    <button type="submit" class="btn btn-primary">Yemek Ekle</button>
+                    <button type="button" id="cancelFoodEditBtn" class="btn btn-danger" style="display:none;">İptal Et</button>
+                </form>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Restorant</th>
+                            <th>Yemek Adı</th>
+                            <th>Açıklama</th>
+                            <th>Fiyat</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="foodTableBody">
+                        <!-- Yemekler buraya gelecek -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SİPARİŞLER SEKMESİ -->
+            <div id="orders-tab" class="tab-content">
+                <h3>Siparişleri İzle</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Sipariş ID</th>
+                            <th>Restorant</th>
+                            <th>Müşteri Telefonu</th>
+                            <th>İçerik</th>
+                            <th>Toplam (₺)</th>
+                            <th>Durum</th>
+                            <th>Tarih</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Siparişler buraya gelecek -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
