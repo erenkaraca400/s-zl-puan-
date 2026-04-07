@@ -650,6 +650,24 @@ body {
 }
 
 /* RESPONSIVE */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 100%;
+        margin: 0;
+    }
+}
+
+@media (max-width: 1024px) {
+    .restaurants-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .orders-list {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         border-radius: 0;
@@ -659,6 +677,7 @@ body {
         flex-direction: column;
         gap: 15px;
         border-radius: 0;
+        padding: 15px;
     }
 
     .navbar h1 {
@@ -670,12 +689,32 @@ body {
         justify-content: center;
     }
 
+    .nav-center {
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
     .panel {
         padding: 20px;
     }
 
+    .customer-tabs, .admin-tabs {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .customer-tab-btn, .tab-btn {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+
     .restaurants-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
     }
 
     .orders-list {
@@ -684,21 +723,140 @@ body {
 
     .table {
         font-size: 12px;
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
     }
 
     .table th, .table td {
-        padding: 10px;
+        padding: 8px 10px;
+        min-width: 80px;
     }
 
     .action-buttons {
         flex-direction: column;
+        gap: 5px;
     }
 
     .form {
         gap: 8px;
+        padding: 15px;
+    }
+
+    .cart-section {
+        padding: 15px;
+        margin-top: 15px;
+    }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .cart-item-info {
+        width: 100%;
+    }
+
+    .modal-content {
+        margin: 10px;
+        padding: 20px;
+        max-width: none;
+        max-height: 90vh;
+    }
+
+    .stat-card {
+        padding: 20px;
+    }
+
+    .stat-number {
+        font-size: 28px;
+    }
+
+    .stat-label {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 10px;
+    }
+
+    .navbar h1 {
+        font-size: 20px;
+    }
+
+    .nav-btn {
+        padding: 6px 12px;
+        font-size: 12px;
     }
 
     .user-info {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+
+    .panel {
+        padding: 15px;
+    }
+
+    .customer-header h2 {
+        font-size: 18px;
+    }
+
+    .restaurant-card {
+        padding: 15px;
+    }
+
+    .restaurant-card img {
+        height: 120px;
+    }
+
+    .detail-image {
+        max-height: 200px;
+    }
+
+    .food-item {
+        padding: 12px;
+    }
+
+    .food-item img {
+        max-height: 120px;
+    }
+
+    .order-card {
+        padding: 15px;
+    }
+
+    .profile-card {
+        padding: 20px;
+    }
+
+    .stat-card {
+        padding: 15px;
+    }
+
+    .stat-number {
+        font-size: 24px;
+    }
+
+    .stat-label {
         font-size: 12px;
+    }
+
+    .table th, .table td {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    .form input, .form textarea {
+        padding: 10px;
+        font-size: 13px;
     }
 }
