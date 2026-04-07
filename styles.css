@@ -435,15 +435,26 @@ body {
     position: relative;
 }
 
-.close {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    font-size: 28px;
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #ffffff;
     cursor: pointer;
-    color: #999;
 }
 
+.payment-option input {
+    accent-color: #667eea;
+}
+
+.payment-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 .close:hover {
     color: #333;
 }

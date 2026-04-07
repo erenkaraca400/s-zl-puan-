@@ -77,6 +77,13 @@
 
         <!-- DÜKKAN TARAFINDA -->
         <div id="shopPanel" class="panel">
+            <div id="shopNotificationBox" class="info-box" style="display:none; margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                    <strong>🔔 İşletme Bildirimleri</strong>
+                    <span id="shopNotificationBadge" class="notification-badge" style="display:none;"></span>
+                </div>
+                <div id="shopNotificationsList" style="margin-top: 15px;"></div>
+            </div>
             <div class="admin-tabs">
                 <button class="tab-btn active" data-tab="restaurants-tab">Dükkânlar</button>
                 <button class="tab-btn" data-tab="foods-tab">Yemekler</button>

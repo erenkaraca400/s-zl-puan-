@@ -8,7 +8,7 @@ function requestNotificationPermission() {
     }
 }
 
-function sendNotification(title, message) {
+function sendNotification(title, message, targetType = 'admin', targetId = null, orderId = null) {
     // Tarayıcı bildirimi (eğer izin varsa)
     if ('Notification' in window && Notification.permission === 'granted') {
         new Notification(title, { body: message, icon: '/favicon.ico' });
@@ -24,7 +24,10 @@ function sendNotification(title, message) {
         title,
         message,
         timestamp: new Date().toISOString(),
-        read: false
+        read: false,
+        targetType,
+        targetId,
+        orderId
     });
     
     // Son 50 bildirimi tut
@@ -34,17 +37,39 @@ function sendNotification(title, message) {
     
     localStorage.setItem('notifications', JSON.stringify(notifications));
     
-    // Admin ise bildirim sayısını güncelle ve aktif sekme ise yeniden render et
     const userRole = localStorage.getItem('userRole');
-    if (userRole === 'admin') {
+    const currentUser = db.getCurrentUser();
+    
+    if (userRole === 'admin' && targetType === 'admin') {
         updateNotificationBadge();
-        
-        // Eğer bildirimler sekmesi aktifse güncelle
         const activeTab = document.querySelector('#adminPanel .tab-content.active');
         if (activeTab && activeTab.id === 'admin-notifications') {
             renderAdminNotifications();
         }
     }
+    
+    if (currentUser?.isShopOwner && targetType === 'shopOwner' && targetId === currentUser.id) {
+        updateShopNotificationBadge();
+        renderShopNotifications();
+    }
+    
+    if (currentUser && targetType === 'customer' && targetId === currentUser.id) {
+        renderCustomerNotifications();
+    }
+}
+
+function getCurrentNotifications() {
+    const currentUser = db.getCurrentUser();
+    const userRole = localStorage.getItem('userRole');
+    const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+    
+    if (userRole === 'admin') {
+        return notifications.filter(n => n.targetType === 'admin' || n.targetType === null);
+    }
+    if (currentUser?.isShopOwner) {
+        return notifications.filter(n => n.targetType === 'shopOwner' && n.targetId === currentUser.id);
+    }
+    return notifications.filter(n => n.targetType === 'customer' && n.targetId === currentUser.id);
 }
 
 class Database {
@@ -66,6 +91,33 @@ class Database {
             localStorage.setItem('orders', JSON.stringify([]));
         }
         this.seedDemoData();
+        this.ensureUserCreditData();
+    }
+
+    ensureUserCreditData() {
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        let shouldUpdate = false;
+        const updatedUsers = users.map(user => {
+            const updatedUser = { ...user };
+            if (updatedUser.creditLimit == null) {
+                updatedUser.creditLimit = 5000;
+                shouldUpdate = true;
+            }
+            if (updatedUser.usedCredit == null) {
+                updatedUser.usedCredit = 0;
+                shouldUpdate = true;
+            }
+            return updatedUser;
+        });
+        if (shouldUpdate) {
+            localStorage.setItem('users', JSON.stringify(updatedUsers));
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            const refreshed = updatedUsers.find(u => u.id === currentUser.id);
+            if (refreshed) {
+                localStorage.setItem('currentUser', JSON.stringify(refreshed));
+            }
+        }
     }
 
     seedDemoData() {
@@ -606,7 +658,7 @@ class Database {
         return JSON.parse(localStorage.getItem('orders') || '[]');
     }
 
-    addOrder(restaurantId, items, total, userPhone, userId) {
+    addOrder(restaurantId, items, total, userPhone, userId, paymentMethod = 'Nakit', paymentData = {}) {
         const orders = this.getOrders();
         const order = {
             id: 'SIP-' + Date.now(),
@@ -616,7 +668,10 @@ class Database {
             userPhone,
             status: 'Bekleme',
             createdAt: new Date().toLocaleString('tr-TR'),
-            userId
+            userId,
+            paymentMethod,
+            paymentData,
+            cardLast4: paymentData.cardLast4 || ''
         };
         orders.push(order);
         localStorage.setItem('orders', JSON.stringify(orders));
@@ -696,7 +751,7 @@ function setupEventListeners() {
     document.getElementById('restaurantForm').addEventListener('submit', handleRestaurantSubmit);
     document.getElementById('foodForm').addEventListener('submit', handleFoodSubmit);
     document.getElementById('searchRestaurant').addEventListener('input', filterRestaurants);
-    document.getElementById('checkoutBtn').addEventListener('click', checkout);
+    document.getElementById('checkoutBtn').addEventListener('click', openCheckoutModal);
     document.querySelector('.close')?.addEventListener('click', closeModal);
 }
 
@@ -1056,34 +1111,129 @@ function removeFromCart(index) {
     updateCart();
 }
 
-function checkout() {
+function openCheckoutModal() {
     if (currentCart.length === 0) return;
-    
+
     const user = db.getCurrentUser();
     if (!user.phone) {
         alert('Lütfen profilinize telefon numarası ekleyin!');
         return;
     }
-    
-    const restaurants = [...new Set(currentCart.map(i => i.restaurantId))];
-    if (restaurants.length > 1) {
-        alert('Farklı restorantlardan aynı anda sipariş veremezsiniz. Lütfen bir restoranttan sipariş verin.');
-        return;
-    }
-    
+
     const restaurantId = currentCart[0].restaurantId;
+    const restaurant = db.getRestaurantById(restaurantId);
     const total = currentCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const remainingCredit = (user.creditLimit || 0) - (user.usedCredit || 0);
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+        <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+            <span class="close">&times;</span>
+            <h2 style="color: #667eea; margin-bottom: 15px;">🛒 Ödeme ve Sipariş Onayı</h2>
+            <div style="margin-bottom: 20px;">
+                <p><strong>Restorant:</strong> ${restaurant?.name || 'Bilinmiyor'}</p>
+                <p><strong>Toplam:</strong> ₺${total.toFixed(2)}</p>
+                <p><strong>Mevcut Kredi Limiti:</strong> ₺${user.creditLimit || 0} (Kalan: ₺${remainingCredit >= 0 ? remainingCredit.toFixed(2) : '0'})</p>
+            </div>
+            <form id="checkoutForm" style="display: flex; flex-direction: column; gap: 15px;">
+                <div><strong>Ödeme Yöntemi</strong></div>
+                <label class="payment-option"><input type="radio" name="paymentMethod" value="Nakit" checked> Nakit</label>
+                <label class="payment-option"><input type="radio" name="paymentMethod" value="Post"> Post</label>
+                <label class="payment-option"><input type="radio" name="paymentMethod" value="Kredi Kartı"> Kredi Kartı</label>
+                <label class="payment-option"><input type="radio" name="paymentMethod" value="Gel Al"> Gel Al</label>
+                <div id="cardFields" class="payment-details">
+                    <input type="text" id="cardNumber" placeholder="Kart Numarası" maxlength="19" pattern="[0-9 ]*" required>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        <input type="text" id="cardExpiry" placeholder="AA/YY" required>
+                        <input type="text" id="cardCvc" placeholder="CVC" maxlength="4" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Ödemeyi Onayla</button>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    const closeBtn = modal.querySelector('.close');
+    closeBtn.addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+
+    const paymentOptions = modal.querySelectorAll('input[name="paymentMethod"]');
+    const cardFields = modal.querySelector('#cardFields');
+    paymentOptions.forEach(input => {
+        input.addEventListener('change', () => {
+            cardFields.style.display = input.value === 'Kredi Kartı' ? 'flex' : 'none';
+        });
+    });
+
+    cardFields.style.display = 'none';
+
+    modal.querySelector('#checkoutForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        processCheckout(modal, restaurant, total);
+    });
+}
+
+function processCheckout(modal, restaurant, total) {
+    const user = db.getCurrentUser();
+    const paymentMethod = modal.querySelector('input[name="paymentMethod"]:checked').value;
+    const paymentData = {};
+
+    if (paymentMethod === 'Kredi Kartı') {
+        const cardNumber = modal.querySelector('#cardNumber').value.replace(/\s+/g, '');
+        const cardExpiry = modal.querySelector('#cardExpiry').value;
+        const cardCvc = modal.querySelector('#cardCvc').value;
+
+        if (!/^\d{16}$/.test(cardNumber) || !/^\d{2}\/\d{2}$/.test(cardExpiry) || !/^\d{3,4}$/.test(cardCvc)) {
+            alert('Lütfen geçerli kart bilgilerini girin!');
+            return;
+        }
+
+        const remainingCredit = (user.creditLimit || 0) - (user.usedCredit || 0);
+        if (remainingCredit < total) {
+            alert('Kredi limitiniz bu siparişi karşılamıyor. Lütfen başka bir ödeme yöntemi seçin.');
+            return;
+        }
+
+        paymentData.cardLast4 = cardNumber.slice(-4);
+        paymentData.cardExpiry = cardExpiry;
+        paymentData.paymentType = 'Kredi Kartı';
+        user.usedCredit = (user.usedCredit || 0) + total;
+        db.updateUser(user);
+    }
+
     const items = currentCart.map(i => `${i.foodName} x${i.quantity}`).join(', ');
-    
-    db.addOrder(restaurantId, items, total, user.phone, user.id);
-    
-    // Bildirim gönder
-    const restaurant = db.getRestaurants().find(r => r.id === restaurantId);
-    sendNotification(`📦 Yeni sipariş: ${restaurant?.name || 'Restorant'}`, `Müşteri: ${user.phone}, Tutar: ₺${total.toFixed(2)}`);
-    
-    alert('✅ Siparişiniz alındı! Sipariş ID: ' + db.getOrders()[db.getOrders().length - 1].id);
+    const order = db.addOrder(restaurant.id, items, total, user.phone, user.id, paymentMethod, paymentData);
+
+    sendNotification(
+        `📦 Yeni sipariş: ${restaurant.name}`,
+        `Sipariş ID: ${order.id}\nMüşteri: ${user.name} (${user.phone})\nTutar: ₺${total.toFixed(2)}\nÖdeme: ${paymentMethod}`,
+        'shopOwner',
+        restaurant.ownerId,
+        order.id
+    );
+
+    sendNotification(
+        `� Yeni sipariş: ${restaurant.name}`,
+        `Sipariş ID: ${order.id}\nMüşteri: ${user.name} (${user.phone})\nTutar: ₺${total.toFixed(2)}\nÖdeme: ${paymentMethod}`,
+        'admin',
+        null,
+        order.id
+    );
+
+    sendNotification(
+        `�📋 Siparişiniz alındı`,
+        `Siparişiniz restorana iletildi. Sipariş ID: ${order.id}`,
+        'customer',
+        user.id,
+        order.id
+    );
+
+    alert('✅ Siparişiniz alındı! Sipariş ID: ' + order.id);
     currentCart = [];
     updateCart();
+    modal.remove();
 }
 
 function renderMyOrders() {
@@ -1099,6 +1249,7 @@ function renderMyOrders() {
     const html = orders.map(order => {
         const restaurant = restaurants.find(r => r.id == order.restaurantId);
         const statusClass = order.status === 'Bekleme' ? 'status-pending' : order.status === 'Onaylandı' ? 'status-confirmed' : 'status-delivered';
+        const paymentLabel = order.paymentMethod ? `${order.paymentMethod}${order.cardLast4 ? ' (****' + order.cardLast4 + ')' : ''}` : 'Bilinmiyor';
         
         return `
             <div class="order-card">
@@ -1109,6 +1260,7 @@ function renderMyOrders() {
                 </div>
                 <div class="order-items"><strong>Ürünler:</strong> ${order.items}</div>
                 <p><strong>Toplam:</strong> ₺${order.total.toFixed(2)}</p>
+                <p><strong>Ödeme:</strong> ${paymentLabel}</p>
                 <span class="order-status ${statusClass}">${order.status}</span>
             </div>
         `;
@@ -1117,8 +1269,32 @@ function renderMyOrders() {
     document.getElementById('myOrdersList').innerHTML = html;
 }
 
+function renderCustomerNotifications() {
+    const notifications = getCurrentNotifications();
+    const listContainer = document.getElementById('customerNotificationsList');
+    if (!listContainer) return;
+    
+    if (notifications.length === 0) {
+        listContainer.innerHTML = '<p style="padding: 15px; color: #6b7280;">Henüz bildirim yok</p>';
+        return;
+    }
+    
+    listContainer.innerHTML = notifications.map(n => {
+        const date = new Date(n.timestamp).toLocaleString('tr-TR');
+        const unreadClass = n.read ? '' : 'unread';
+        return `
+            <div class="notification-item ${unreadClass}" onclick="markNotificationAsRead(${n.id})">
+                <h4>${n.title}</h4>
+                <p>${n.message}</p>
+                <div class="timestamp">${date}</div>
+            </div>
+        `;
+    }).join('');
+}
+
 function renderProfile() {
     const user = db.getCurrentUser();
+    const remainingCredit = (user.creditLimit || 0) - (user.usedCredit || 0);
     
     const html = `
         <div class="profile-card">
@@ -1134,13 +1310,22 @@ function renderProfile() {
                 <label>Email</label>
                 <input type="email" id="profileEmail" value="${user.email}" placeholder="ornek@email.com">
             </div>
+            <div class="profile-field">
+                <label>Kredi Limiti</label>
+                <input type="text" value="₺${user.creditLimit || 0} (Kalan: ₺${remainingCredit >= 0 ? remainingCredit.toFixed(2) : 0})" disabled>
+            </div>
             <div class="profile-actions">
                 <button class="btn btn-primary" onclick="saveProfile()">Kaydet</button>
             </div>
         </div>
+        <div class="info-box" style="margin-top: 20px;">
+            <h4>🔔 Bildirimler</h4>
+            <div id="customerNotificationsList"></div>
+        </div>
     `;
     
     document.getElementById('profileContent').innerHTML = html;
+    renderCustomerNotifications();
 }
 
 function saveProfile() {
@@ -1331,7 +1516,8 @@ function renderAdminUsers() {
 }
 
 function renderAdminNotifications() {
-    const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+    const notifications = JSON.parse(localStorage.getItem('notifications') || '[]')
+        .filter(n => n.targetType === 'admin' || n.targetType === null);
     
     if (notifications.length === 0) {
         document.getElementById('notificationsList').innerHTML = '<p style="text-align: center; padding: 20px; color: #6b7280;">Henüz bildirim yok</p>';
@@ -1377,7 +1563,10 @@ function markNotificationAsRead(notificationId) {
         notification.read = true;
         localStorage.setItem('notifications', JSON.stringify(notifications));
         renderAdminNotifications();
+        renderShopNotifications();
+        renderCustomerNotifications();
         updateNotificationBadge();
+        updateShopNotificationBadge();
     }
 }
 
@@ -1400,7 +1589,52 @@ function switchShopTab(e) {
 }
 
 function renderShopView() {
+    renderShopNotifications();
     renderMyShopInfo();
+}
+
+function renderShopNotifications() {
+    const user = db.getCurrentUser();
+    const notifications = JSON.parse(localStorage.getItem('notifications') || '[]')
+        .filter(n => n.targetType === 'shopOwner' && n.targetId === user.id);
+    const container = document.getElementById('shopNotificationsList');
+    const box = document.getElementById('shopNotificationBox');
+
+    if (!container || !box) return;
+
+    if (notifications.length === 0) {
+        box.style.display = 'none';
+        return;
+    }
+
+    box.style.display = 'block';
+    const html = notifications.map(n => {
+        const date = new Date(n.timestamp).toLocaleString('tr-TR');
+        const unreadClass = n.read ? '' : 'unread';
+        return `
+            <div class="notification-item ${unreadClass}" onclick="markNotificationAsRead(${n.id})">
+                <h4>${n.title}</h4>
+                <p>${n.message}</p>
+                <div class="timestamp">${date}</div>
+            </div>
+        `;
+    }).join('');
+    container.innerHTML = html;
+    updateShopNotificationBadge();
+}
+
+function updateShopNotificationBadge() {
+    const user = db.getCurrentUser();
+    const unreadCount = JSON.parse(localStorage.getItem('notifications') || '[]')
+        .filter(n => n.targetType === 'shopOwner' && n.targetId === user.id && !n.read).length;
+    const badge = document.getElementById('shopNotificationBadge');
+    if (!badge) return;
+    if (unreadCount > 0) {
+        badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+        badge.style.display = 'inline-block';
+    } else {
+        badge.style.display = 'none';
+    }
 }
 
 function renderMyShopInfo() {
@@ -1578,6 +1812,15 @@ function renderOrderTable() {
 
 function updateOrderStatus(orderId, status) {
     db.updateOrderStatus(orderId, status);
+    const updatedOrder = db.getOrders().find(o => o.id === orderId);
+    if (updatedOrder) {
+        if (status === 'Onaylandı' || status === 'Teslim Edildi') {
+            const message = status === 'Onaylandı'
+                ? `Siparişiniz ${orderId} onaylandı. Restorant hazırlık yapıyor.`
+                : `Siparişiniz ${orderId} teslim edildi. Afiyet olsun!`;
+            sendNotification(`✅ Sipariş ${status}`, message, 'customer', updatedOrder.userId, orderId);
+        }
+    }
     alert('✅ Sipariş durumu güncellendi!');
     renderOrderTable();
 }
