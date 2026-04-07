@@ -34,10 +34,16 @@ function sendNotification(title, message) {
     
     localStorage.setItem('notifications', JSON.stringify(notifications));
     
-    // Admin ise bildirim sayısını güncelle
+    // Admin ise bildirim sayısını güncelle ve aktif sekme ise yeniden render et
     const userRole = localStorage.getItem('userRole');
     if (userRole === 'admin') {
         updateNotificationBadge();
+        
+        // Eğer bildirimler sekmesi aktifse güncelle
+        const activeTab = document.querySelector('#adminPanel .tab-content.active');
+        if (activeTab && activeTab.id === 'admin-notifications') {
+            renderAdminNotifications();
+        }
     }
 }
 
@@ -1324,6 +1330,29 @@ function renderAdminUsers() {
     document.getElementById('adminUsersTableBody').innerHTML = html || '<tr><td colspan="6" style="text-align: center;">Kullanıcı yok</td></tr>';
 }
 
+function renderAdminNotifications() {
+    const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+    
+    if (notifications.length === 0) {
+        document.getElementById('notificationsList').innerHTML = '<p style="text-align: center; padding: 20px; color: #6b7280;">Henüz bildirim yok</p>';
+        return;
+    }
+    
+    const html = notifications.map(n => {
+        const date = new Date(n.timestamp).toLocaleString('tr-TR');
+        const unreadClass = n.read ? '' : 'unread';
+        return `
+            <div class="notification-item ${unreadClass}" onclick="markNotificationAsRead(${n.id})">
+                <h4>${n.title}</h4>
+                <p>${n.message}</p>
+                <div class="timestamp">${date}</div>
+            </div>
+        `;
+    }).join('');
+    
+    document.getElementById('notificationsList').innerHTML = html;
+}
+
 function adminDeleteShop(shopId) {
     if (confirm('Bu dükkanı silmek istediğinizden emin misiniz? Tüm yemekleri ve siparişleri de silinecek!')) {
         db.deleteRestaurant(shopId);
@@ -1340,19 +1369,15 @@ function adminDeleteFood(foodId) {
     }
 }
 
-function adminDeleteUser(userId) {
-    if (confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz? İlgili tüm siparişler de silinecek!')) {
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
-        const updatedUsers = users.filter(u => u.id !== userId);
-        localStorage.setItem('users', JSON.stringify(updatedUsers));
-        
-        // Kullanıcının dükkanını sil
-        let restaurants = db.getRestaurants();
-        const userShops = restaurants.filter(r => r.ownerId === userId);
-        userShops.forEach(shop => db.deleteRestaurant(shop.id));
-        
-        alert('✅ Kullanıcı ve ilgili veriler silindi!');
-        renderAdminUsers();
+function markNotificationAsRead(notificationId) {
+    const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+    const notification = notifications.find(n => n.id === notificationId);
+    
+    if (notification && !notification.read) {
+        notification.read = true;
+        localStorage.setItem('notifications', JSON.stringify(notifications));
+        renderAdminNotifications();
+        updateNotificationBadge();
     }
 }
 
