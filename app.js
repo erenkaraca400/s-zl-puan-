@@ -1,6 +1,45 @@
-// ====================
-// VERİ TABANASI YÖNETİMİ
-// ====================
+function requestNotificationPermission() {
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                console.log('🔔 Bildirim izni verildi');
+            }
+        });
+    }
+}
+
+function sendNotification(title, message) {
+    // Tarayıcı bildirimi (eğer izin varsa)
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, { body: message, icon: '/favicon.ico' });
+    }
+    
+    // Konsol bildirimi
+    console.log(`🔔 BİLDİRİM: ${title} - ${message}`);
+    
+    // Local bildirim geçmişi
+    const notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+    notifications.unshift({
+        id: Date.now(),
+        title,
+        message,
+        timestamp: new Date().toISOString(),
+        read: false
+    });
+    
+    // Son 50 bildirimi tut
+    if (notifications.length > 50) {
+        notifications.splice(50);
+    }
+    
+    localStorage.setItem('notifications', JSON.stringify(notifications));
+    
+    // Admin ise bildirim sayısını güncelle
+    const userRole = localStorage.getItem('userRole');
+    if (userRole === 'admin') {
+        updateNotificationBadge();
+    }
+}
 
 class Database {
     constructor() {
@@ -669,6 +708,10 @@ function checkUserType() {
         shopBtn.style.display = 'none';
         openShopBtn.style.display = 'none';
         switchToAdmin();
+        
+        // Bildirim izni iste
+        requestNotificationPermission();
+        updateNotificationBadge();
     } else if (user.isShopOwner && user.shopData) {
         shopBtn.style.display = 'inline-block';
         openShopBtn.style.display = 'none';
@@ -851,6 +894,9 @@ async function createShop(modal) {
     db.updateUser(user);
     db.addRestaurant(user.id, name, desc, phone, imageUrl);
     
+    // Bildirim gönder
+    sendNotification(`🏪 Yeni dükkan açıldı: ${name}`, 'Yeni bir dükkan sisteme katıldı!');
+    
     alert('✅ Dükkanınız açıldı! Yönetim paneline geçiliyor...');
     modal.remove();
     
@@ -1025,6 +1071,10 @@ function checkout() {
     
     db.addOrder(restaurantId, items, total, user.phone, user.id);
     
+    // Bildirim gönder
+    const restaurant = db.getRestaurants().find(r => r.id === restaurantId);
+    sendNotification(`📦 Yeni sipariş: ${restaurant?.name || 'Restorant'}`, `Müşteri: ${user.phone}, Tutar: ₺${total.toFixed(2)}`);
+    
     alert('✅ Siparişiniz alındı! Sipariş ID: ' + db.getOrders()[db.getOrders().length - 1].id);
     currentCart = [];
     updateCart();
@@ -1112,6 +1162,18 @@ function switchToShop() {
     document.getElementById('shopBtn').classList.add('active');
     document.getElementById('customerBtn').classList.remove('active');
     renderShopView();
+    
+    // Dükkan sahibi panelinde periyodik güncelleme (her 30 saniyede bir)
+    if (window.shopUpdateInterval) {
+        clearInterval(window.shopUpdateInterval);
+    }
+    window.shopUpdateInterval = setInterval(() => {
+        // Eğer orders tab'ı aktifse güncelle
+        const activeTab = document.querySelector('#shopPanel .tab-content.active');
+        if (activeTab && activeTab.id === 'orders-tab') {
+            renderOrderTable();
+        }
+    }, 30000);
 }
 
 // ====================
@@ -1126,6 +1188,15 @@ function switchToAdmin() {
     document.getElementById('customerBtn').classList.remove('active');
     document.getElementById('shopBtn').classList.remove('active');
     renderAdminView();
+    
+    // Admin panelinde periyodik güncelleme (her 30 saniyede bir)
+    if (window.adminUpdateInterval) {
+        clearInterval(window.adminUpdateInterval);
+    }
+    window.adminUpdateInterval = setInterval(() => {
+        renderAdminDashboard();
+        updateNotificationBadge();
+    }, 30000);
 }
 
 function switchAdminTab(e) {
@@ -1142,6 +1213,7 @@ function switchAdminTab(e) {
     if (tabName === 'admin-foods') renderAdminFoods();
     if (tabName === 'admin-orders') renderAdminOrders();
     if (tabName === 'admin-users') renderAdminUsers();
+    if (tabName === 'admin-notifications') renderAdminNotifications();
 }
 
 function renderAdminView() {

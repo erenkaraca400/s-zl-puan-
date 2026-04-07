@@ -13,7 +13,7 @@
             <div class="nav-center">
                 <button id="customerBtn" class="nav-btn active">👤 Müşteri</button>
                 <button id="shopBtn" class="nav-btn">🏪 Dükkan</button>
-                <button id="adminBtn" class="nav-btn" style="display: none;">👨‍💼 Admin</button>
+                <button id="adminBtn" class="nav-btn" style="display: none;">👨‍💼 Admin <span id="notificationBadge" class="notification-badge" style="display: none;"></span></button>
                 <button id="openShopBtn" class="nav-btn btn-success" style="display: none;">+ Dükkan Aç</button>
             </div>
             <div class="nav-user">
@@ -156,6 +156,7 @@
                 <button class="tab-btn" data-tab="admin-foods">🍽️ Tüm Yemekler</button>
                 <button class="tab-btn" data-tab="admin-orders">📦 Tüm Siparişler</button>
                 <button class="tab-btn" data-tab="admin-users">👥 Kullanıcılar</button>
+                <button class="tab-btn" data-tab="admin-notifications">🔔 Bildirimler</button>
             </div>
 
             <!-- DASHBOARD -->
@@ -254,6 +255,14 @@
                     <tbody id="adminUsersTableBody">
                     </tbody>
                 </table>
+            </div>
+
+            <!-- BİLDİRİMLER -->
+            <div id="admin-notifications" class="tab-content">
+                <h3>🔔 Bildirim Geçmişi</h3>
+                <div id="notificationsList" class="notifications-container">
+                    <!-- Bildirimler buraya gelecek -->
+                </div>
             </div>
         </div>
     </div>
