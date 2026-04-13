@@ -107,6 +107,18 @@ class Database {
                 updatedUser.usedCredit = 0;
                 shouldUpdate = true;
             }
+            if (!updatedUser.address) {
+                updatedUser.address = 'Adres bilgisi güncellenecek';
+                shouldUpdate = true;
+            }
+            if (!updatedUser.city) {
+                updatedUser.city = 'İstanbul';
+                shouldUpdate = true;
+            }
+            if (!updatedUser.district) {
+                updatedUser.district = 'Kadıköy';
+                shouldUpdate = true;
+            }
             return updatedUser;
         });
         if (shouldUpdate) {
@@ -125,7 +137,7 @@ class Database {
         const restaurants = JSON.parse(localStorage.getItem('restaurants') || '[]');
         const foods = JSON.parse(localStorage.getItem('foods') || '[]');
 
-        if (users.length > 0 || restaurants.length > 0 || foods.length > 0) {
+        if (users.length >= 10 && restaurants.length >= 6 && foods.length >= 20) {
             return;
         }
 
@@ -136,6 +148,9 @@ class Database {
                 lastName: 'Yıldız',
                 name: 'Ahmet Yıldız',
                 phone: '05551234567',
+                address: 'Atatürk Caddesi No: 123',
+                city: 'İstanbul',
+                district: 'Kadıköy',
                 email: 'ahmet@example.com',
                 password: '123456',
                 isShopOwner: false,
@@ -148,6 +163,9 @@ class Database {
                 lastName: 'Kara',
                 name: 'Fatma Kara',
                 phone: '05557654321',
+                address: 'Cumhuriyet Mahallesi No: 45',
+                city: 'İstanbul',
+                district: 'Üsküdar',
                 email: 'fatma@example.com',
                 password: '123456',
                 isShopOwner: true,
@@ -168,6 +186,9 @@ class Database {
                 lastName: 'Demir',
                 name: 'Merve Demir',
                 phone: '05559876543',
+                address: 'Bahçelievler Sokak No: 67',
+                city: 'İstanbul',
+                district: 'Bahçelievler',
                 email: 'merve@example.com',
                 password: '123456',
                 isShopOwner: true,
@@ -188,6 +209,9 @@ class Database {
                 lastName: 'Çelik',
                 name: 'Ali Çelik',
                 phone: '05551111111',
+                address: 'Abdi İpekçi Caddesi No: 89',
+                city: 'İstanbul',
+                district: 'Şişli',
                 email: 'ali@example.com',
                 password: '123456',
                 isShopOwner: true,
@@ -208,6 +232,9 @@ class Database {
                 lastName: 'Öztürk',
                 name: 'Zeynep Öztürk',
                 phone: '05552222222',
+                address: 'Beşiktaş Caddesi No: 12',
+                city: 'İstanbul',
+                district: 'Beşiktaş',
                 email: 'zeynep@example.com',
                 password: '123456',
                 isShopOwner: true,
@@ -228,6 +255,9 @@ class Database {
                 lastName: 'Şahin',
                 name: 'Mehmet Şahin',
                 phone: '05553333333',
+                address: 'Fatih Sultan Mehmet Caddesi No: 34',
+                city: 'İstanbul',
+                district: 'Fatih',
                 email: 'mehmet@example.com',
                 password: '123456',
                 isShopOwner: true,
@@ -248,6 +278,9 @@ class Database {
                 lastName: 'Yılmaz',
                 name: 'Ayşe Yılmaz',
                 phone: '05554444444',
+                address: 'Taksim Meydanı No: 56',
+                city: 'İstanbul',
+                district: 'Beyoğlu',
                 email: 'ayse@example.com',
                 password: '123456',
                 isShopOwner: true,
@@ -268,6 +301,9 @@ class Database {
                 lastName: 'Kaya',
                 name: 'Can Kaya',
                 phone: '05555555555',
+                address: 'Levent Caddesi No: 78',
+                city: 'İstanbul',
+                district: 'Beşiktaş',
                 email: 'can@example.com',
                 password: '123456',
                 isShopOwner: false,
@@ -280,6 +316,9 @@ class Database {
                 lastName: 'Aydın',
                 name: 'Elif Aydın',
                 phone: '05556666666',
+                address: 'Maslak Mahallesi No: 90',
+                city: 'İstanbul',
+                district: 'Sarıyer',
                 email: 'elif@example.com',
                 password: '123456',
                 isShopOwner: false,
@@ -292,6 +331,9 @@ class Database {
                 lastName: 'Koç',
                 name: 'Burak Koç',
                 phone: '05557777777',
+                address: 'Ümraniye Caddesi No: 101',
+                city: 'İstanbul',
+                district: 'Ümraniye',
                 email: 'burak@example.com',
                 password: '123456',
                 isShopOwner: false,
@@ -1142,6 +1184,12 @@ function openCheckoutModal() {
                 <label class="payment-option"><input type="radio" name="paymentMethod" value="Post"> Post</label>
                 <label class="payment-option"><input type="radio" name="paymentMethod" value="Kredi Kartı"> Kredi Kartı</label>
                 <label class="payment-option"><input type="radio" name="paymentMethod" value="Gel Al"> Gel Al</label>
+                <div id="addressFields" class="payment-details">
+                    <div><strong>Teslimat Adresi</strong></div>
+                    <input type="text" id="deliveryAddress" placeholder="Adres" required>
+                    <input type="text" id="deliveryCity" placeholder="İl" required>
+                    <input type="text" id="deliveryDistrict" placeholder="İlçe" required>
+                </div>
                 <div id="cardFields" class="payment-details">
                     <input type="text" id="cardNumber" placeholder="Kart Numarası" maxlength="19" pattern="[0-9 ]*" required>
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
@@ -1161,13 +1209,16 @@ function openCheckoutModal() {
 
     const paymentOptions = modal.querySelectorAll('input[name="paymentMethod"]');
     const cardFields = modal.querySelector('#cardFields');
+    const addressFields = modal.querySelector('#addressFields');
     paymentOptions.forEach(input => {
         input.addEventListener('change', () => {
             cardFields.style.display = input.value === 'Kredi Kartı' ? 'flex' : 'none';
+            addressFields.style.display = input.value === 'Gel Al' ? 'none' : 'flex';
         });
     });
 
     cardFields.style.display = 'none';
+    addressFields.style.display = 'flex'; // Show by default since Nakit is checked
 
     modal.querySelector('#checkoutForm').addEventListener('submit', (e) => {
         e.preventDefault();
@@ -1180,6 +1231,22 @@ function processCheckout(modal, restaurant, total) {
     const paymentMethod = modal.querySelector('input[name="paymentMethod"]:checked').value;
     const paymentData = {};
 
+    // Address validation for delivery methods
+    if (paymentMethod !== 'Gel Al') {
+        const deliveryAddress = modal.querySelector('#deliveryAddress').value.trim();
+        const deliveryCity = modal.querySelector('#deliveryCity').value.trim();
+        const deliveryDistrict = modal.querySelector('#deliveryDistrict').value.trim();
+
+        if (!deliveryAddress || !deliveryCity || !deliveryDistrict) {
+            alert('Lütfen teslimat adresini eksiksiz girin!');
+            return;
+        }
+
+        paymentData.deliveryAddress = deliveryAddress;
+        paymentData.deliveryCity = deliveryCity;
+        paymentData.deliveryDistrict = deliveryDistrict;
+    }
+
     if (paymentMethod === 'Kredi Kartı') {
         const cardNumber = modal.querySelector('#cardNumber').value.replace(/\s+/g, '');
         const cardExpiry = modal.querySelector('#cardExpiry').value;
@@ -1190,17 +1257,10 @@ function processCheckout(modal, restaurant, total) {
             return;
         }
 
-        const remainingCredit = (user.creditLimit || 0) - (user.usedCredit || 0);
-        if (remainingCredit < total) {
-            alert('Kredi limitiniz bu siparişi karşılamıyor. Lütfen başka bir ödeme yöntemi seçin.');
-            return;
-        }
-
         paymentData.cardLast4 = cardNumber.slice(-4);
         paymentData.cardExpiry = cardExpiry;
         paymentData.paymentType = 'Kredi Kartı';
-        user.usedCredit = (user.usedCredit || 0) + total;
-        db.updateUser(user);
+        // Removed credit check for demo purposes
     }
 
     const items = currentCart.map(i => `${i.foodName} x${i.quantity}`).join(', ');

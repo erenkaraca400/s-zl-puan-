@@ -299,6 +299,21 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Adres</label>
+                        <input type="text" id="signupAddress" placeholder="Adresiniz" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>İl</label>
+                        <input type="text" id="signupCity" placeholder="İl" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>İlçe</label>
+                        <input type="text" id="signupDistrict" placeholder="İlçe" required>
+                    </div>
+
+                    <div class="form-group">
                         <label>Email</label>
                         <input type="email" id="signupEmail" placeholder="ornek@email.com" required>
                     </div>
@@ -360,11 +375,18 @@
             const firstName = document.getElementById('signupFirstName').value.trim();
             const lastName = document.getElementById('signupLastName').value.trim();
             const phone = document.getElementById('signupPhone').value.trim();
+            const address = document.getElementById('signupAddress').value.trim();
+            const city = document.getElementById('signupCity').value.trim();
+            const district = document.getElementById('signupDistrict').value.trim();
             const email = document.getElementById('signupEmail').value.trim().toLowerCase();
             const password = document.getElementById('signupPassword').value;
 
             if (phone.length < 10) {
                 showError('signupError', 'Lütfen geçerli bir telefon numarası girin!');
+                return;
+            }
+            if (!address || !city || !district) {
+                showError('signupError', 'Lütfen adres bilgilerini eksiksiz girin!');
                 return;
             }
             if (password.length < 6) {
@@ -384,6 +406,9 @@
                 lastName,
                 name: firstName + ' ' + lastName,
                 phone,
+                address,
+                city,
+                district,
                 email,
                 password,
                 isShopOwner: false,
