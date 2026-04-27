@@ -64,6 +64,30 @@
                 </div>
             </div>
 
+            <!-- Yorum Modal -->
+            <div id="reviewModal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeReviewModal()">&times;</span>
+                    <h2>Yorum Yap</h2>
+                    <form id="reviewForm" class="form">
+                        <input type="hidden" id="reviewOrderId">
+                        <input type="hidden" id="reviewRestaurantId">
+                        <div class="rating-stars">
+                            <label>Puan:</label>
+                            <div class="stars">
+                                <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                                <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                                <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                                <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                                <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+                            </div>
+                        </div>
+                        <textarea id="reviewComment" placeholder="Yorumunuzu yazın..." rows="4"></textarea>
+                        <button type="submit" class="btn btn-primary">Yorumu Gönder</button>
+                    </form>
+                </div>
+            </div>
+
             <!-- Alışveriş Sepeti -->
             <div class="cart-section">
                 <h3>🛒 Sepetim</h3>

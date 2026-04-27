@@ -90,6 +90,9 @@ class Database {
         if (!localStorage.getItem('orders')) {
             localStorage.setItem('orders', JSON.stringify([]));
         }
+        if (!localStorage.getItem('reviews')) {
+            localStorage.setItem('reviews', JSON.stringify([]));
+        }
         this.seedDemoData();
         this.updateRestaurantImages(); // Always update images
         this.ensureUserCreditData();
@@ -138,7 +141,7 @@ class Database {
         const restaurants = JSON.parse(localStorage.getItem('restaurants') || '[]');
         const foods = JSON.parse(localStorage.getItem('foods') || '[]');
 
-        if (users.length >= 10 && restaurants.length >= 6 && foods.length >= 20) {
+        if (users.length >= 10 && restaurants.length >= 4 && foods.length >= 20) {
             return;
         }
 
@@ -204,52 +207,7 @@ class Database {
                 },
                 createdAt: '10.02.2025'
             },
-            {
-                id: 1004,
-                firstName: 'Ali',
-                lastName: 'Çelik',
-                name: 'Ali Çelik',
-                phone: '05551111111',
-                address: 'Abdi İpekçi Caddesi No: 89',
-                city: 'İstanbul',
-                district: 'Şişli',
-                email: 'ali@example.com',
-                password: '123456',
-                isShopOwner: true,
-                shopData: {
-                    name: 'Burger House',
-                    desc: 'Amerikan tarzı burgerler',
-                    phone: '05551111111',
-                    imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80',
-                    tin: '1111111111',
-                    licenseDate: '2025-03-01',
-                    createdAt: '01.03.2025'
-                },
-                createdAt: '01.03.2025'
-            },
-            {
-                id: 1005,
-                firstName: 'Zeynep',
-                lastName: 'Öztürk',
-                name: 'Zeynep Öztürk',
-                phone: '05552222222',
-                address: 'Beşiktaş Caddesi No: 12',
-                city: 'İstanbul',
-                district: 'Beşiktaş',
-                email: 'zeynep@example.com',
-                password: '123456',
-                isShopOwner: true,
-                shopData: {
-                    name: 'Pizza Palace',
-                    desc: 'İtalyan pizzaları ve makarnalar',
-                    phone: '05552222222',
-                    imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80',
-                    tin: '2222222222',
-                    licenseDate: '2025-03-15',
-                    createdAt: '15.03.2025'
-                },
-                createdAt: '15.03.2025'
-            },
+    
             {
                 id: 1006,
                 firstName: 'Mehmet',
@@ -363,24 +321,6 @@ class Database {
                 createdAt: '10.02.2025'
             },
             {
-                id: 2003,
-                ownerId: 1004,
-                name: 'Burger House',
-                desc: 'Amerikan tarzı burgerler',
-                phone: '05551111111',
-                imageUrl: 'indir (2).jfif',
-                createdAt: '01.03.2025'
-            },
-            {
-                id: 2004,
-                ownerId: 1005,
-                name: 'Pizza Palace',
-                desc: 'İtalyan pizzaları ve makarnalar',
-                phone: '05552222222',
-                imageUrl: 'indir (3).jfif',
-                createdAt: '15.03.2025'
-            },
-            {
                 id: 2005,
                 ownerId: 1006,
                 name: 'Çiğ Köfteci',
@@ -469,74 +409,6 @@ class Database {
                 imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80'
             },
 
-            // Burger House yemekleri
-            {
-                id: 3009,
-                restaurantId: 2003,
-                name: 'Classic Burger',
-                desc: 'Dana eti, cheddar peyniri, marul, domates',
-                price: 95,
-                imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80'
-            },
-            {
-                id: 3010,
-                restaurantId: 2003,
-                name: 'Chicken Burger',
-                desc: 'Tavuk göğsü, özel sos, patates kızartması ile',
-                price: 85,
-                imageUrl: 'https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=800&q=80'
-            },
-            {
-                id: 3011,
-                restaurantId: 2003,
-                name: 'Double Cheeseburger',
-                desc: 'Çift dana eti, bol cheddar',
-                price: 125,
-                imageUrl: 'https://images.unsplash.com/photo-1551782450-17144efb5723?auto=format&fit=crop&w=800&q=80'
-            },
-            {
-                id: 3012,
-                restaurantId: 2003,
-                name: 'Veggie Burger',
-                desc: 'Sebzeli burger, vegan',
-                price: 75,
-                imageUrl: 'https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=800&q=80'
-            },
-
-            // Pizza Palace yemekleri
-            {
-                id: 3013,
-                restaurantId: 2004,
-                name: 'Margherita Pizza',
-                desc: 'Domates, mozzarella, fesleğen',
-                price: 85,
-                imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80'
-            },
-            {
-                id: 3014,
-                restaurantId: 2004,
-                name: 'Pepperoni Pizza',
-                desc: 'Pepperoni, mozzarella, domates sosu',
-                price: 105,
-                imageUrl: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=800&q=80'
-            },
-            {
-                id: 3015,
-                restaurantId: 2004,
-                name: 'Carbonara Makarna',
-                desc: 'Krema, parmesan, jambon',
-                price: 75,
-                imageUrl: 'https://images.unsplash.com/photo-1551892376-c73a4e14c03f?auto=format&fit=crop&w=800&q=80'
-            },
-            {
-                id: 3016,
-                restaurantId: 2004,
-                name: 'Pesto Makarna',
-                desc: 'Fesleğen soslu, parmesanlı',
-                price: 70,
-                imageUrl: 'https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80'
-            },
-
             // Çiğ Köfteci yemekleri
             {
                 id: 3017,
@@ -618,9 +490,7 @@ class Database {
         const restaurants = this.getRestaurants();
         const imageUpdates = {
             2001: 'indir.jfif',
-            2002: 'indir (1).jfif',
-            2003: 'indir (2).jfif',
-            2004: 'indir (3).jfif'
+            2002: 'indir (1).jfif'
         };
 
         const updatedRestaurants = restaurants.map(r => {
@@ -757,6 +627,35 @@ class Database {
 
     getOrdersByUser(userId) {
         return this.getOrders().filter(o => o.userId === userId);
+    }
+
+    // Yorumlar
+    getReviews() {
+        return JSON.parse(localStorage.getItem('reviews') || '[]');
+    }
+
+    addReview(orderId, userId, restaurantId, rating, comment) {
+        const reviews = this.getReviews();
+        const review = {
+            id: 'REV-' + Date.now(),
+            orderId,
+            userId,
+            restaurantId,
+            rating: parseInt(rating),
+            comment,
+            createdAt: new Date().toLocaleString('tr-TR')
+        };
+        reviews.push(review);
+        localStorage.setItem('reviews', JSON.stringify(reviews));
+        return review;
+    }
+
+    getReviewsByRestaurant(restaurantId) {
+        return this.getReviews().filter(r => r.restaurantId === restaurantId);
+    }
+
+    getReviewByOrder(orderId) {
+        return this.getReviews().find(r => r.orderId === orderId);
     }
 
     // Kullanıcı
@@ -1138,6 +1037,28 @@ function viewRestaurant(restaurantId) {
     
     html += '</div>';
     
+    // Yorumları göster
+    const reviews = db.getReviewsByRestaurant(restaurantId);
+    if (reviews.length > 0) {
+        const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+        html += `
+            <div class="reviews-section">
+                <h3>⭐ Yorumlar (${reviews.length}) - Ortalama: ${avgRating.toFixed(1)}/5</h3>
+                ${reviews.map(review => `
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</span>
+                            <span class="review-date">${review.createdAt}</span>
+                        </div>
+                        ${review.comment ? `<p class="review-comment">${review.comment}</p>` : ''}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } else {
+        html += '<div class="reviews-section"><h3>⭐ Yorumlar</h3><p>Henüz yorum yok</p></div>';
+    }
+    
     document.getElementById('detailContent').innerHTML = html;
     document.getElementById('restaurantDetail').style.display = 'block';
 }
@@ -1384,8 +1305,27 @@ function renderMyOrders() {
     const restaurants = db.getRestaurants();
     const html = orders.map(order => {
         const restaurant = restaurants.find(r => r.id == order.restaurantId);
-        const statusClass = order.status === 'Bekleme' ? 'status-pending' : order.status === 'Onaylandı' ? 'status-confirmed' : 'status-delivered';
+        const statusSteps = ['Bekleme', 'Onaylandı', 'Hazırlanıyor', 'Yolda', 'Teslim Edildi'];
+        const currentStepIndex = statusSteps.indexOf(o.status);
+        const progressPercent = ((currentStepIndex + 1) / statusSteps.length) * 100;
+        
+        const statusHtml = `
+            <div class="order-tracking">
+                <div class="tracking-progress" style="width: ${progressPercent}%"></div>
+                <div class="tracking-steps">
+                    ${statusSteps.map((step, index) => `
+                        <div class="tracking-step ${index <= currentStepIndex ? 'active' : ''}">
+                            <div class="step-dot"></div>
+                            <span class="step-label">${step}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
         const paymentLabel = order.paymentMethod ? `${order.paymentMethod}${order.cardLast4 ? ' (****' + order.cardLast4 + ')' : ''}` : 'Bilinmiyor';
+        const existingReview = db.getReviewByOrder(order.id);
+        const reviewButton = order.status === 'Teslim Edildi' && !existingReview ? 
+            `<button class="btn btn-primary" onclick="openReviewModal('${order.id}', ${order.restaurantId})" style="margin-top: 10px;">Yorum Yap</button>` : '';
         
         return `
             <div class="order-card">
@@ -1397,7 +1337,8 @@ function renderMyOrders() {
                 <div class="order-items"><strong>Ürünler:</strong> ${order.items}</div>
                 <p><strong>Toplam:</strong> ₺${order.total.toFixed(2)}</p>
                 <p><strong>Ödeme:</strong> ${paymentLabel}</p>
-                <span class="order-status ${statusClass}">${order.status}</span>
+                ${statusHtml}
+                ${reviewButton}
             </div>
         `;
     }).join('');
@@ -1478,6 +1419,42 @@ function saveProfile() {
     displayUserInfo();
     alert('✅ Profiliniz güncellendi!');
 }
+
+// ====================
+// YORUM SİSTEMİ
+// ====================
+
+function openReviewModal(orderId, restaurantId) {
+    document.getElementById('reviewOrderId').value = orderId;
+    document.getElementById('reviewRestaurantId').value = restaurantId;
+    document.getElementById('reviewModal').style.display = 'block';
+}
+
+function closeReviewModal() {
+    document.getElementById('reviewModal').style.display = 'none';
+    document.getElementById('reviewForm').reset();
+}
+
+document.getElementById('reviewForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const orderId = document.getElementById('reviewOrderId').value;
+    const restaurantId = document.getElementById('reviewRestaurantId').value;
+    const rating = document.querySelector('input[name="rating"]:checked')?.value;
+    const comment = document.getElementById('reviewComment').value.trim();
+    
+    if (!rating) {
+        alert('Lütfen bir puan verin!');
+        return;
+    }
+    
+    const user = db.getCurrentUser();
+    db.addReview(orderId, user.id, parseInt(restaurantId), rating, comment);
+    
+    alert('✅ Yorumunuz gönderildi!');
+    closeReviewModal();
+    renderMyOrders(); // Sipariş listesini güncelle
+});
 
 // ====================
 // DÜKKAN SAHİBİ ARAYÜZÜ
@@ -1998,6 +1975,8 @@ function renderOrderTable() {
                 <select onchange="updateOrderStatus('${o.id}', this.value)">
                     <option value="Bekleme" ${o.status === 'Bekleme' ? 'selected' : ''}>Bekleme</option>
                     <option value="Onaylandı" ${o.status === 'Onaylandı' ? 'selected' : ''}>Onaylandı</option>
+                    <option value="Hazırlanıyor" ${o.status === 'Hazırlanıyor' ? 'selected' : ''}>Hazırlanıyor</option>
+                    <option value="Yolda" ${o.status === 'Yolda' ? 'selected' : ''}>Yolda</option>
                     <option value="Teslim Edildi" ${o.status === 'Teslim Edildi' ? 'selected' : ''}>Teslim Edildi</option>
                 </select>
             </td>
