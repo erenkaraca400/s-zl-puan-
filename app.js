@@ -91,6 +91,7 @@ class Database {
             localStorage.setItem('orders', JSON.stringify([]));
         }
         this.seedDemoData();
+        this.updateRestaurantImages(); // Always update images
         this.ensureUserCreditData();
     }
 
@@ -349,7 +350,7 @@ class Database {
                 name: 'Kumru Döner',
                 desc: 'Lezzetli döner ve mezeler',
                 phone: '05557654321',
-                imageUrl: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80',
+                imageUrl: 'indir.jfif',
                 createdAt: '01.01.2025'
             },
             {
@@ -358,7 +359,7 @@ class Database {
                 name: 'Pideci Usta',
                 desc: 'Sıcak pide ve lahmacun',
                 phone: '05559876543',
-                imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80',
+                imageUrl: 'indir (1).jfif',
                 createdAt: '10.02.2025'
             },
             {
@@ -367,7 +368,7 @@ class Database {
                 name: 'Burger House',
                 desc: 'Amerikan tarzı burgerler',
                 phone: '05551111111',
-                imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80',
+                imageUrl: 'indir (2).jfif',
                 createdAt: '01.03.2025'
             },
             {
@@ -376,7 +377,7 @@ class Database {
                 name: 'Pizza Palace',
                 desc: 'İtalyan pizzaları ve makarnalar',
                 phone: '05552222222',
-                imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80',
+                imageUrl: 'indir (3).jfif',
                 createdAt: '15.03.2025'
             },
             {
@@ -608,6 +609,28 @@ class Database {
         localStorage.setItem('users', JSON.stringify(sampleUsers));
         localStorage.setItem('restaurants', JSON.stringify(sampleRestaurants));
         localStorage.setItem('foods', JSON.stringify(sampleFoods));
+
+        // Update restaurant images with local files
+        this.updateRestaurantImages();
+    }
+
+    updateRestaurantImages() {
+        const restaurants = this.getRestaurants();
+        const imageUpdates = {
+            2001: 'indir.jfif',
+            2002: 'indir (1).jfif',
+            2003: 'indir (2).jfif',
+            2004: 'indir (3).jfif'
+        };
+
+        const updatedRestaurants = restaurants.map(r => {
+            if (imageUpdates[r.id]) {
+                return { ...r, imageUrl: imageUpdates[r.id] };
+            }
+            return r;
+        });
+
+        localStorage.setItem('restaurants', JSON.stringify(updatedRestaurants));
     }
 
     // Restoranlar (Dükkânlar)
