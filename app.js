@@ -986,7 +986,15 @@ async function createShop(modal) {
     }
     
     const user = db.getCurrentUser();
-    const imageUrl = await fileToBase64(imageFile);
+    
+    let imageUrl;
+    try {
+        imageUrl = await fileToBase64(imageFile);
+    } catch (error) {
+        alert('Resim yüklenirken hata oluştu: ' + error.message);
+        return;
+    }
+    
     const shopData = {
         name,
         desc,
@@ -1820,7 +1828,7 @@ async function handleRestaurantSubmit(e) {
             imageUrl = await fileToBase64(imageFile);
         } catch (error) {
             alert('Resim yüklenirken hata oluştu: ' + error.message);
-            imageUrl = undefined;
+            return;
         }
     } else {
         imageUrl = undefined;
@@ -1857,10 +1865,10 @@ async function handleFoodSubmit(e) {
             imageUrl = await fileToBase64(imageFile);
         } catch (error) {
             alert('Resim yüklenirken hata oluştu: ' + error.message);
-            imageUrl = id ? undefined : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ZZW1lawPC90ZXh0Pjwvc3ZnPg==';
+            return;
         }
     } else {
-        imageUrl = id ? undefined : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ZZW1lawPC90ZXh0Pjwvc3ZnPg==';
+        imageUrl = undefined; // Resim yoksa undefined, render sırasında placeholder gösterilecek
     }
     
     if (id) {
@@ -1879,8 +1887,40 @@ async function handleFoodSubmit(e) {
 
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
+        // Resim boyutu kontrol et (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            reject(new Error('Resim 2MB\'dan küçük olmalıdır'));
+            return;
+        }
+
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
+        reader.onload = () => {
+            const img = new Image();
+            img.onload = () => {
+                // Canvas ile resmi compress et
+                const canvas = document.createElement('canvas');
+                let { width, height } = img;
+                
+                // Maksimum boyut 800x600
+                if (width > 800 || height > 600) {
+                    const ratio = Math.min(800 / width, 600 / height);
+                    width = Math.round(width * ratio);
+                    height = Math.round(height * ratio);
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // JPEG olarak compress et (0.8 kalite)
+                const compressedData = canvas.toDataURL('image/jpeg', 0.8);
+                resolve(compressedData);
+            };
+            img.onerror = () => reject(new Error('Resim yüklenemedi'));
+            img.src = reader.result;
+        };
         reader.onerror = reject;
         reader.readAsDataURL(file);
     });
