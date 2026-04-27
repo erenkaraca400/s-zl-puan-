@@ -750,6 +750,12 @@ class Database {
             localStorage.setItem('users', JSON.stringify(users));
         }
     }
+
+    deleteUser(userId) {
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        users = users.filter(u => u.id != userId);
+        localStorage.setItem('users', JSON.stringify(users));
+    }
 }
 
 // ====================
@@ -1651,6 +1657,14 @@ function adminDeleteFood(foodId) {
         db.deleteFood(foodId);
         alert('✅ Yemek silindi!');
         renderAdminFoods();
+    }
+}
+
+function adminDeleteUser(userId) {
+    if (confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) {
+        db.deleteUser(userId);
+        alert('✅ Kullanıcı silindi!');
+        renderAdminUsers();
     }
 }
 
