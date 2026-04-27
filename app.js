@@ -615,7 +615,7 @@ class Database {
         return JSON.parse(localStorage.getItem('restaurants') || '[]');
     }
 
-    addRestaurant(ownerId, name, desc, phone, imageUrl = 'https://via.placeholder.com/400x250?text=Restoran') {
+    addRestaurant(ownerId, name, desc, phone, imageUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5SZXN0b3JhbgPC90ZXh0Pjwvc3ZnPg==') {
         const restaurants = this.getRestaurants();
         const restaurant = {
             id: Date.now(),
@@ -666,7 +666,7 @@ class Database {
         return this.getFoods().filter(f => f.restaurantId == restaurantId);
     }
 
-    addFood(restaurantId, name, desc, price, imageUrl = 'https://via.placeholder.com/400x250?text=Yemek') {
+    addFood(restaurantId, name, desc, price, imageUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ZZW1lawPC90ZXh0Pjwvc3ZnPg==') {
         const foods = this.getFoods();
         const food = {
             id: Date.now(),
@@ -1040,7 +1040,7 @@ function renderRestaurants() {
     const restaurants = db.getRestaurants();
     const html = restaurants.map(r => `
         <div class="restaurant-card">
-            <img src="${r.imageUrl || 'https://via.placeholder.com/400x250?text=Restoran'}" alt="${r.name}" />
+            <img src="${r.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5SZXN0b3JhbgPC90ZXh0Pjwvc3ZnPg=='}" alt="${r.name}" />
             <h3>🍽️ ${r.name}</h3>
             <p>${r.desc || 'Açıklama yok'}</p>
             <p class="phone">📞 ${r.phone}</p>
@@ -1058,7 +1058,7 @@ function filterRestaurants() {
     
     const html = filtered.map(r => `
         <div class="restaurant-card">
-            <img src="${r.imageUrl || 'https://via.placeholder.com/400x250?text=Restoran'}" alt="${r.name}" />
+            <img src="${r.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5SZXN0b3JhbgPC90ZXh0Pjwvc3ZnPg=='}" alt="${r.name}" />
             <h3>🍽️ ${r.name}</h3>
             <p>${r.desc || 'Açıklama yok'}</p>
             <p class="phone">📞 ${r.phone}</p>
@@ -1075,7 +1075,7 @@ function viewRestaurant(restaurantId) {
     
     let html = `
         <div class="detail-header">
-            <img class="detail-image" src="${restaurant.imageUrl || 'https://via.placeholder.com/400x250?text=Restoran'}" alt="${restaurant.name}" />
+            <img class="detail-image" src="${restaurant.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5SZXN0b3JhbgPC90ZXh0Pjwvc3ZnPg=='}" alt="${restaurant.name}" />
             <h2>${restaurant.name}</h2>
             <p>${restaurant.desc}</p>
             <p>📞 ${restaurant.phone}</p>
@@ -1086,7 +1086,7 @@ function viewRestaurant(restaurantId) {
     if (foods.length > 0) {
         html += foods.map(f => `
             <div class="food-item">
-                <img src="${f.imageUrl || 'https://via.placeholder.com/400x250?text=Yemek'}" alt="${f.name}" />
+                <img src="${f.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ZZW1lawPC90ZXh0Pjwvc3ZnPg=='}" alt="${f.name}" />
                 <h4>${f.name}</h4>
                 <p class="description">${f.desc}</p>
                 <div class="food-item-footer">
@@ -1186,15 +1186,15 @@ function openCheckoutModal() {
                 <label class="payment-option"><input type="radio" name="paymentMethod" value="Gel Al"> Gel Al</label>
                 <div id="addressFields" class="payment-details">
                     <div><strong>Teslimat Adresi</strong></div>
-                    <input type="text" id="deliveryAddress" placeholder="Adres" required>
-                    <input type="text" id="deliveryCity" placeholder="İl" required>
-                    <input type="text" id="deliveryDistrict" placeholder="İlçe" required>
+                    <input type="text" id="deliveryAddress" placeholder="Adres">
+                    <input type="text" id="deliveryCity" placeholder="İl">
+                    <input type="text" id="deliveryDistrict" placeholder="İlçe">
                 </div>
                 <div id="cardFields" class="payment-details">
-                    <input type="text" id="cardNumber" placeholder="Kart Numarası" maxlength="19" pattern="[0-9 ]*" required>
+                    <input type="text" id="cardNumber" placeholder="Kart Numarası" maxlength="19" pattern="[0-9 ]*">
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                        <input type="text" id="cardExpiry" placeholder="AA/YY" required>
-                        <input type="text" id="cardCvc" placeholder="CVC" maxlength="4" required>
+                        <input type="text" id="cardExpiry" placeholder="AA/YY">
+                        <input type="text" id="cardCvc" placeholder="CVC" maxlength="4">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success">Ödemeyi Onayla</button>
@@ -1239,8 +1239,16 @@ function processCheckout(modal, restaurant, total) {
         const deliveryCity = modal.querySelector('#deliveryCity').value.trim();
         const deliveryDistrict = modal.querySelector('#deliveryDistrict').value.trim();
 
-        if (!deliveryAddress || !deliveryCity || !deliveryDistrict) {
-            alert('Lütfen teslimat adresini eksiksiz girin!');
+        if (!deliveryAddress) {
+            alert('Lütfen teslimat adresini girin!');
+            return;
+        }
+        if (!deliveryCity) {
+            alert('Lütfen şehir/il bilgisini girin!');
+            return;
+        }
+        if (!deliveryDistrict) {
+            alert('Lütfen ilçe bilgisini girin!');
             return;
         }
 
@@ -1254,8 +1262,29 @@ function processCheckout(modal, restaurant, total) {
         const cardExpiry = modal.querySelector('#cardExpiry').value;
         const cardCvc = modal.querySelector('#cardCvc').value;
 
-        if (!/^\d{16}$/.test(cardNumber) || !/^\d{2}\/\d{2}$/.test(cardExpiry) || !/^\d{3,4}$/.test(cardCvc)) {
-            alert('Lütfen geçerli kart bilgilerini girin!');
+        if (!cardNumber) {
+            alert('Lütfen kredi kartı numarasını girin!');
+            return;
+        }
+        if (!cardExpiry) {
+            alert('Lütfen kartın son kullanma tarihini girin (AA/YY)!');
+            return;
+        }
+        if (!cardCvc) {
+            alert('Lütfen CVC kodunu girin!');
+            return;
+        }
+
+        if (!/^\d{16}$/.test(cardNumber)) {
+            alert('Kart numarası 16 haneli olmalıdır!');
+            return;
+        }
+        if (!/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+            alert('Son kullanma tarihi AA/YY formatında olmalıdır!');
+            return;
+        }
+        if (!/^\d{3,4}$/.test(cardCvc)) {
+            alert('CVC 3 veya 4 haneli olmalıdır!');
             return;
         }
 
@@ -1285,17 +1314,25 @@ function processCheckout(modal, restaurant, total) {
     );
 
     sendNotification(
-        `�📋 Siparişiniz alındı`,
+        `📋 Siparişiniz alındı`,
         `Siparişiniz restorana iletildi. Sipariş ID: ${order.id}`,
         'customer',
         user.id,
         order.id
     );
 
-    alert('✅ Siparişiniz alındı! Sipariş ID: ' + order.id);
+    // Success message
+    modal.querySelector('.modal-content').innerHTML = `
+        <div style="text-align: center; padding: 40px 20px;">
+            <h2 style="color: #28a745; margin-bottom: 20px;">✅ Siparişiniz Başarıyla Kaydedildi!</h2>
+            <p style="font-size: 18px; margin-bottom: 10px;">Sipariş ID: <strong>${order.id}</strong></p>
+            <p style="margin-bottom: 30px;">Siparişiniz restorana iletildi. Kısa sürede hazırlanıp teslim edilecektir.</p>
+            <button class="btn btn-success" onclick="this.closest('.modal').remove()">Tamam</button>
+        </div>
+    `;
+
     currentCart = [];
     updateCart();
-    modal.remove();
 }
 
 function renderMyOrders() {
@@ -1711,7 +1748,7 @@ function renderMyShopInfo() {
     
     const html = `
         <h3>📍 Mevcut Dükkân Bilgileri</h3>
-        <img class="detail-image" src="${shop.imageUrl || 'https://via.placeholder.com/400x250?text=Restoran'}" alt="${shop.name}" />
+        <img class="detail-image" src="${shop.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5SZXN0b3JhbgPC90ZXh0Pjwvc3ZnPg=='}" alt="${shop.name}" />
         <p><strong>Adı:</strong> ${shop.name}</p>
         <p><strong>Açıklaması:</strong> ${shop.desc}</p>
         <p><strong>Telefon:</strong> ${shop.phone}</p>
@@ -1739,7 +1776,7 @@ function renderFoodTable() {
     const html = foods.map(f => `
         <tr>
             <td>${f.name}</td>
-            <td><img src="${f.imageUrl || 'https://via.placeholder.com/180x100?text=Yemek'}" alt="${f.name}" style="width: 120px; height: 80px; object-fit: cover; border-radius: 6px;" /></td>
+            <td><img src="${f.imageUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ZZW1lawPC90ZXh0Pjwvc3ZnPg=='}" alt="${f.name}" style="width: 120px; height: 80px; object-fit: cover; border-radius: 6px;" /></td>
             <td>${f.desc || '-'}</td>
             <td>₺${f.price.toFixed(2)}</td>
             <td>
@@ -1806,10 +1843,10 @@ async function handleFoodSubmit(e) {
             imageUrl = await fileToBase64(imageFile);
         } catch (error) {
             alert('Resim yüklenirken hata oluştu: ' + error.message);
-            imageUrl = id ? undefined : 'https://via.placeholder.com/400x250?text=Yemek';
+            imageUrl = id ? undefined : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ZZW1lawPC90ZXh0Pjwvc3ZnPg==';
         }
     } else {
-        imageUrl = id ? undefined : 'https://via.placeholder.com/400x250?text=Yemek';
+        imageUrl = id ? undefined : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ZZW1lawPC90ZXh0Pjwvc3ZnPg==';
     }
     
     if (id) {
