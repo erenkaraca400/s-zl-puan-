@@ -455,6 +455,9 @@ body {
     flex-direction: column;
     gap: 10px;
 }
+.payment-details.hidden {
+    display: none;
+}
 .close:hover {
     color: #333;
 }

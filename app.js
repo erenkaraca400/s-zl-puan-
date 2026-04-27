@@ -1210,15 +1210,17 @@ function openCheckoutModal() {
     const paymentOptions = modal.querySelectorAll('input[name="paymentMethod"]');
     const cardFields = modal.querySelector('#cardFields');
     const addressFields = modal.querySelector('#addressFields');
+    function updatePaymentFields() {
+        const selected = modal.querySelector('input[name="paymentMethod"]:checked');
+        if (selected) {
+            cardFields.classList.toggle('hidden', selected.value !== 'Kredi Kartı');
+            addressFields.classList.toggle('hidden', selected.value === 'Gel Al');
+        }
+    }
     paymentOptions.forEach(input => {
-        input.addEventListener('change', () => {
-            cardFields.style.display = input.value === 'Kredi Kartı' ? 'flex' : 'none';
-            addressFields.style.display = input.value === 'Gel Al' ? 'none' : 'flex';
-        });
+        input.addEventListener('change', updatePaymentFields);
     });
-
-    cardFields.style.display = 'none';
-    addressFields.style.display = 'flex'; // Show by default since Nakit is checked
+    updatePaymentFields(); // initial
 
     modal.querySelector('#checkoutForm').addEventListener('submit', (e) => {
         e.preventDefault();
@@ -1760,7 +1762,18 @@ async function handleRestaurantSubmit(e) {
     const phone = document.getElementById('restaurantPhone').value;
     const imageFile = document.getElementById('restaurantImageFile')?.files[0];
     const shops = db.getRestaurantsByOwner(user.id);
-    const imageUrl = imageFile ? await fileToBase64(imageFile) : undefined;
+    
+    let imageUrl;
+    if (imageFile) {
+        try {
+            imageUrl = await fileToBase64(imageFile);
+        } catch (error) {
+            alert('Resim yüklenirken hata oluştu: ' + error.message);
+            imageUrl = undefined;
+        }
+    } else {
+        imageUrl = undefined;
+    }
     
     if (shops.length > 0) {
         db.updateRestaurant(shops[0].id, name, desc, phone, imageUrl);
@@ -1786,7 +1799,18 @@ async function handleFoodSubmit(e) {
     const desc = document.getElementById('foodDesc').value;
     const price = document.getElementById('foodPrice').value;
     const imageFile = document.getElementById('foodImageFile').files[0];
-    const imageUrl = imageFile ? await fileToBase64(imageFile) : (id ? undefined : 'https://via.placeholder.com/400x250?text=Yemek');
+    
+    let imageUrl;
+    if (imageFile) {
+        try {
+            imageUrl = await fileToBase64(imageFile);
+        } catch (error) {
+            alert('Resim yüklenirken hata oluştu: ' + error.message);
+            imageUrl = id ? undefined : 'https://via.placeholder.com/400x250?text=Yemek';
+        }
+    } else {
+        imageUrl = id ? undefined : 'https://via.placeholder.com/400x250?text=Yemek';
+    }
     
     if (id) {
         db.updateFood(parseInt(id), name, desc, price, imageUrl);
